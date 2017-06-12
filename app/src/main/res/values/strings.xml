@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Reddit-Demo</string>
+    <string name="reddit_login">Reddit Login</string>
+</resources>
