@@ -1,20 +1,11 @@
 package be.sanderdebleecker.reddit_demo.da
 
-import android.util.Base64
-import android.util.Log
-import io.reactivex.Observable
-import io.reactivex.Observer
-import okhttp3.*
-import org.json.JSONException
-import org.json.JSONObject
-import java.io.IOException
-
 /**
  * @author Simulan
  * @version 1.0.0
  * @since 12/06/2017
  */
-class OAuthenticator : IOAuthenticator {
+/*class OAuthenticator : IOAuthenticator {
 
 
     override fun getAccessToken(): Observable<Pair<String, String>> {
@@ -53,9 +44,8 @@ class OAuthenticator : IOAuthenticator {
         })
         return object : Observable<Pair<String, String>>() {
             override fun subscribeActual(observer: Observer<in Pair<String, String>>?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                TODO("not implemented")
             }
-
         }
     }
-}
+}*/

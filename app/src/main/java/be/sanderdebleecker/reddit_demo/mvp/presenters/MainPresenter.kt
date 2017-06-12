@@ -21,24 +21,7 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
 
 
     // nonview logic
-    fun redditLogin() {
-        val url = String.format(AUTH_URL, CLIENT_ID, STATE, REDIRECT_URI)
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-    }
-    fun redditLoginResult(intent: Intent) {
-        if (intent.action == Intent.ACTION_VIEW) {
-            val uri = intent.data
-            if (uri.getQueryParameter("error") != null) {
-                val error = uri.getQueryParameter("error")
-                Log.e(this.packageName, "An error has occurred : " + error)
-            } else {
-                val state = uri.getQueryParameter("state")
-                if (state == STATE) {
-                    val code = uri.getQueryParameter("code")
-                    getAccessToken(code)
-                }
-            }
-        }
-    }
+
+
 
 }

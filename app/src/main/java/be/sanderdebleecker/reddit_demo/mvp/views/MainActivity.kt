@@ -1,19 +1,12 @@
 package be.sanderdebleecker.reddit_demo.mvp.views
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Base64
-import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import be.sanderdebleecker.reddit_demo.R
 import be.sanderdebleecker.reddit_demo.mvp.presenters.MainPresenter
-import okhttp3.*
-import org.json.JSONException
-import org.json.JSONObject
-import java.io.IOException
 import javax.inject.Inject
 
 
@@ -28,12 +21,12 @@ class MainActivity : AppCompatActivity(), MainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         btnRedditLogin = findViewById(R.id.main_btnRedditLogin) as Button
-        btnRedditLogin.setOnClickListener { mPresenter.redditLoginClick() }
+        btnRedditLogin.setOnClickListener { }
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if (intent != null) mPresenter.redditLoginResult(intent)
+        //if (intent != null) mPresenter.redditLoginResult(intent)
     }
     //UI Binds
 
