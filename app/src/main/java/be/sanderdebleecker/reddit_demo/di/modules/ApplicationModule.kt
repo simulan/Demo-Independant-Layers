@@ -1,14 +1,12 @@
 package be.sanderdebleecker.reddit_demo.di.modules
 
 import android.content.Context
-import be.sanderdebleecker.reddit_demo.BuildConfig
 import dagger.Module
 import dagger.Provides
-import okhttp3.*
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.net.URL
 import javax.inject.Singleton
 
 /**
@@ -20,7 +18,6 @@ import javax.inject.Singleton
  */
 @Module
 class ApplicationModule(private val mContext: Context) {
-    private val APP_KEY = BuildConfig.APP_KEY
     private val URL : String = "http://www.example.com"
 
     @Provides
@@ -46,17 +43,6 @@ class ApplicationModule(private val mContext: Context) {
     fun provideOkHttpClient(): OkHttpClient {
         //Configure to deserialize returned JSON
         val clientBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
-        //Interceptor to add API key to every request
-        clientBuilder.addInterceptor { chain ->
-            val original: Request = chain!!.request()
-            val originalHttpUrl: HttpUrl = original.url()
-            val url: HttpUrl = originalHttpUrl.newBuilder()
-                    .addQueryParameter("key", APP_KEY)
-                    .build()
-            val requestBuilder: Request.Builder = original.newBuilder().url(url)
-            val request: Request = requestBuilder.build()
-            chain.proceed(request)
-        }
         return clientBuilder.build()
     }
 
@@ -68,7 +54,7 @@ class ApplicationModule(private val mContext: Context) {
                 .baseUrl(URL)
                 .addConverterFactory(converterFactory)
                 .addCallAdapterFactory(adapterFactory)
-                .build();
+                .build()
     }
 
 }
