@@ -11,14 +11,12 @@ import javax.inject.Singleton
 
 /**
  * @author Simulan
- * *
  * @version 1.0.0
- * *
  * @since 11/06/2017
  */
 @Module
 class ApplicationModule(private val mContext: Context) {
-    private val URL : String = "http://www.example.com"
+    private val URL : String = "https://www.reddit.com"
 
     @Provides
     @Singleton
@@ -41,7 +39,6 @@ class ApplicationModule(private val mContext: Context) {
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
-        //Configure to deserialize returned JSON
         val clientBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
         return clientBuilder.build()
     }

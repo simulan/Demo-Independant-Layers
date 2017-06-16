@@ -7,10 +7,9 @@
     android:layout_height="match_parent"
     tools:context="be.sanderdebleecker.reddit_demo.mvp.views.MainActivity">
 
-    <android.support.v7.widget.AppCompatButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/main_btnRedditLogin"
-        android:text="@string/reddit_login"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </android.support.constraint.ConstraintLayout>
