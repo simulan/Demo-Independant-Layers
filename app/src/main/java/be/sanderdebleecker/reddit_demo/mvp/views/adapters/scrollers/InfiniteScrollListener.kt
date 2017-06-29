@@ -8,7 +8,7 @@ package be.sanderdebleecker.reddit_demo.mvp.views.adapters.scrollers
  */
 
 abstract class InfiniteScrollListener constructor(private val linearLayoutManager: android.support.v7.widget.LinearLayoutManager, private val VISIBLE_THRESHOLD: Int = 10) : android.support.v7.widget.RecyclerView.OnScrollListener() {
-    abstract var isBlockingAppend: Boolean
+    abstract var blockingAppend: Boolean
     private var prevTotalItemCount : Int = 0
     protected var loading : Boolean = true
 
@@ -31,7 +31,7 @@ abstract class InfiniteScrollListener constructor(private val linearLayoutManage
         }
         //  load more if we re viewing the threshold's items, enabling smooth scrolling
         val scrollingToEnd : Boolean = (firstVisibleItem + visibleItemCount + VISIBLE_THRESHOLD) >= totalItemCount
-        if (!loading && !isBlockingAppend && scrollingToEnd) loading = onAppendItems()
+        if (!loading && !blockingAppend && scrollingToEnd) loading = onAppendItems()
     }
 
 

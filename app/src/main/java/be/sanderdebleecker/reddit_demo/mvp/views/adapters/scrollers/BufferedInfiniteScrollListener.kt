@@ -15,13 +15,13 @@ import timber.log.Timber
  * links to an adapter with a limited collection
  */
 abstract class BufferedInfiniteScrollListener(layoutManager: LinearLayoutManager,private val VISIBLE_THRESHOLD : Int = 10) : InfiniteScrollListener(layoutManager,VISIBLE_THRESHOLD) {
-    abstract var isBlockingPrepend: Boolean
+    abstract var blockingPrepend: Boolean
 
     override fun onScroll(firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
-        Timber.v("Scrolling($totalItemCount) {loading:$loading} ")
         super.onScroll(firstVisibleItem, visibleItemCount, totalItemCount)
         val scrollingToStart : Boolean = (firstVisibleItem - VISIBLE_THRESHOLD) <= 0
-        if(!loading && !isBlockingPrepend  && scrollingToStart) onPrependItems()
+        Timber.v("Scrolling($totalItemCount) {loading:$loading,toStart:$scrollingToStart,blockingPrepend:$blockingPrepend,blockAppend:$blockingAppend} ")
+        if(!loading && !blockingPrepend && scrollingToStart) loading=onPrependItems()
     }
     fun adapterStoppedLoading() {
         loading = false

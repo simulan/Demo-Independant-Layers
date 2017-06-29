@@ -56,14 +56,15 @@ class MainActivity constructor() : BaseActivity(), MainView {
         Timber.d("${threads.size} threads added to adapter's list(${mAdapter.itemCount}) {appended: $append} ")
         if(append) {
             mAdapter.add(threads)
+            if(mAdapter.itemCount>40) scrollListener.blockingPrepend=false
             if(threads.isEmpty()) {
-                scrollListener.isBlockingAppend = true
+                scrollListener.blockingAppend = true
                 Timber.d(".ThreadScrollListener blocking appends now")
             }
         } else {
             mAdapter.prepend(threads)
             if(threads.isEmpty()) {
-                scrollListener.isBlockingPrepend = true
+                scrollListener.blockingPrepend = true
                 Timber.d(".ThreadScrollListener is blocking prepends now")
             }
         }
@@ -71,8 +72,8 @@ class MainActivity constructor() : BaseActivity(), MainView {
     }
     override fun clearThreads() {
         mAdapter.clear()
-        scrollListener.isBlockingAppend = false
-        scrollListener.isBlockingPrepend = false
+        scrollListener.blockingAppend = true
+        scrollListener.blockingPrepend = false
     }
 
     //BaseActivity
@@ -89,16 +90,16 @@ class MainActivity constructor() : BaseActivity(), MainView {
 
     //ScrollListener
     inner class ThreadsScrollListener(linearLayoutManager: LinearLayoutManager) : BufferedInfiniteScrollListener(linearLayoutManager) {
-        override var isBlockingAppend: Boolean = false
-        override var isBlockingPrepend: Boolean = true
+        override var blockingAppend: Boolean = false
+        override var blockingPrepend: Boolean = true
 
         override fun onAppendItems() : Boolean {
-            //isBlockingPrepend= false
+            //blockingPrepend= false
             Timber.d("scrolled up and requesting more items")
             return mPresenter.getThreads(after=THREAD_PREFIX+mAdapter.lastId,limit=LIMIT,count=mAdapter.itemCount)
         }
         override fun onPrependItems(): Boolean {
-            //isBlockingAppend= false
+            //blockingAppend= false
             Timber.d("scrolled down and requesting more items")
             return mPresenter.getThreads(before=THREAD_PREFIX+mAdapter.firstId,limit=LIMIT,count=mAdapter.itemCount)
         }
