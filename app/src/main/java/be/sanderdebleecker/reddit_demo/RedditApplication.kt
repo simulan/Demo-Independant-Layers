@@ -4,6 +4,10 @@ import android.app.Application
 import be.sanderdebleecker.reddit_demo.di.components.ApplicationComponent
 import be.sanderdebleecker.reddit_demo.di.components.DaggerApplicationComponent
 import be.sanderdebleecker.reddit_demo.di.modules.ApplicationModule
+import timber.log.Timber
+import timber.log.Timber.DebugTree
+
+
 
 /**
  * @author Simulan
@@ -16,6 +20,15 @@ class RedditApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         initializeApplicationComponent()
+        configTimber()
+    }
+
+    private fun configTimber() {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(DebugTree())
+        } else {
+            //TODO: implement release crash reporting
+        }
     }
 
     private fun initializeApplicationComponent() {

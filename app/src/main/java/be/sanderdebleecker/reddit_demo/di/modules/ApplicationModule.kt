@@ -27,7 +27,6 @@ class ApplicationModule(private val mContext: Context) {
     internal fun provideContext(): Context {
         return mContext
     }
-
     @Singleton
     @Provides
     fun provideGsonConverterFactory(): GsonConverterFactory {
@@ -35,20 +34,17 @@ class ApplicationModule(private val mContext: Context) {
                 .create()
         return GsonConverterFactory.create(gson)
     }
-
     @Singleton
     @Provides
     fun provideRxJava2CallAdapterFactory(): RxJava2CallAdapterFactory {
         return RxJava2CallAdapterFactory.create()
     }
-
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
         val clientBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
         return clientBuilder.build()
     }
-
     @Singleton
     @Provides
     fun provideRetrofit(client: OkHttpClient, converterFactory: GsonConverterFactory, adapterFactory: RxJava2CallAdapterFactory): Retrofit {
@@ -59,5 +55,4 @@ class ApplicationModule(private val mContext: Context) {
                 .addCallAdapterFactory(adapterFactory)
                 .build()
     }
-
 }
