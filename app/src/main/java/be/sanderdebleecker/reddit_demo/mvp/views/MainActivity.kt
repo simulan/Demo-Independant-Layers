@@ -15,6 +15,7 @@ import be.sanderdebleecker.reddit_demo.mvp.presenters.MainPresenter
 import be.sanderdebleecker.reddit_demo.mvp.views.adapters.ThreadsAdapter
 import be.sanderdebleecker.reddit_demo.mvp.views.adapters.scrollers.ScrollListener
 import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
 import javax.inject.Inject
 
 

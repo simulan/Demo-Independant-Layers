@@ -5,7 +5,6 @@ import be.sanderdebleecker.reddit_demo.di.components.ApplicationComponent
 import be.sanderdebleecker.reddit_demo.di.components.DaggerApplicationComponent
 import be.sanderdebleecker.reddit_demo.di.modules.ApplicationModule
 import timber.log.Timber
-import timber.log.Timber.DebugTree
 
 
 
@@ -25,7 +24,11 @@ class RedditApplication : Application() {
 
     private fun configTimber() {
         if (BuildConfig.DEBUG) {
-            Timber.plant(DebugTree())
+            Timber.plant(object : Timber.DebugTree(){
+                override fun createStackElementTag(element: StackTraceElement?): String {
+                    return super.createStackElementTag(element) + ":" +element?.lineNumber
+                }
+            })
         } else {
             //TODO: implement release crash reporting
         }
