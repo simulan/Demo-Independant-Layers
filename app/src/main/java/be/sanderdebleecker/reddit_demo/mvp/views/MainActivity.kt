@@ -35,6 +35,7 @@ class MainActivity constructor() : BaseActivity(), MainView {
         recycler.layoutManager = layoutManager
         mPresenter.getThreads()
         recycler.addOnScrollListener(scrollListener)
+        Timber.d("${this.javaClass}'s View Loaded")
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.threads_menu, menu)
@@ -52,16 +53,18 @@ class MainActivity constructor() : BaseActivity(), MainView {
 
     //MainView
     override fun showThreads(threads: List<RThread>, append: Boolean) {
+        Timber.d("${threads.size} threads added to adapter's list(${mAdapter.itemCount}) {appended: $append} ")
         if(append) {
             mAdapter.add(threads)
             if(threads.isEmpty()) {
                 scrollListener.isBlockingAppend = true
-                println("")
+                Timber.d(".ThreadScrollListener blocking appends now")
             }
         } else {
             mAdapter.prepend(threads)
             if(threads.isEmpty()) {
                 scrollListener.isBlockingPrepend = true
+                Timber.d(".ThreadScrollListener is blocking prepends now")
             }
         }
     }
@@ -91,11 +94,13 @@ class MainActivity constructor() : BaseActivity(), MainView {
 
         override fun onAppendItems() : Boolean {
             //isBlockingPrepend= false
+            Timber.d("scrolled up and requesting more items")
             return mPresenter.getThreads(after=THREAD_PREFIX+mAdapter.lastId,limit=LIMIT,count=mAdapter.itemCount)
         }
 
         override fun onPrependItems(): Boolean {
             //isBlockingAppend= false
+            Timber.d("scrolled down and requesting more items")
             return mPresenter.getThreads(before=THREAD_PREFIX+mAdapter.firstId,limit=LIMIT,count=mAdapter.itemCount)
         }
     }

@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import be.sanderdebleecker.reddit_demo.mvp.models.data.RThread
 import be.sanderdebleecker.reddit_demo.mvp.views.adapters.viewholders.ThreadViewHolder
+import timber.log.Timber
 
 /**
  * @author Simulan
@@ -55,10 +56,12 @@ class ThreadsAdapter() : RecyclerView.Adapter<ThreadViewHolder>() {
         trim(trimEnd,trimStart)
     }
     fun trim(end : Int,start : Int,count : Int = end-start+1) {
+        Timber.d("trimming list($itemCount) $end to $start")
         for(i in end downTo start) {
             list.removeAt(i)
         }
         notifyItemRangeRemoved(start,count)
+        Timber.d("trimmed list($itemCount) by $count items")
     }
 }
 
