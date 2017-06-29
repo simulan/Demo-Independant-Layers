@@ -6,11 +6,12 @@ package be.sanderdebleecker.reddit_demo.mvp.views.adapters.scrollers
  * @version 1.0.0
  * @since 16/06/2017
  */
-abstract class ScrollListener constructor(private val linearLayoutManager: android.support.v7.widget.LinearLayoutManager, private val VISIBLE_THRESHOLD: Int = 10) : android.support.v7.widget.RecyclerView.OnScrollListener() {
+
+abstract class InfiniteScrollListener constructor(private val linearLayoutManager: android.support.v7.widget.LinearLayoutManager, private val VISIBLE_THRESHOLD: Int = 10) : android.support.v7.widget.RecyclerView.OnScrollListener() {
+    abstract var isBlockingAppend: Boolean
     private var prevTotalItemCount : Int = 0
-    private var loading : Boolean = true
-    abstract var isBlockingAppend : Boolean
-    abstract var isBlockingPrepend: Boolean
+    protected var loading : Boolean = true
+
 
     override fun onScrolled(recyclerView: android.support.v7.widget.RecyclerView?, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
@@ -28,15 +29,13 @@ abstract class ScrollListener constructor(private val linearLayoutManager: andro
             loading = false
             prevTotalItemCount = totalItemCount
         }
-        // BufferAppend : load more if we re viewing the threshold's items, enabling smooth scrolling
-        if (!loading && !isBlockingAppend && (firstVisibleItem + visibleItemCount + VISIBLE_THRESHOLD) >= totalItemCount ) {
-            loading = onAppendItems()
-        }
-        // BufferPrepend : load more if we re viewing the threshold's items, enabling smooth scrolling
-        if (!loading && !isBlockingPrepend && (firstVisibleItem - VISIBLE_THRESHOLD) <= 0  ) {
-            loading = onPrependItems()
-        }
+        //  load more if we re viewing the threshold's items, enabling smooth scrolling
+        val scrollingToEnd : Boolean = (firstVisibleItem + visibleItemCount + VISIBLE_THRESHOLD) >= totalItemCount
+        if (!loading && !isBlockingAppend && scrollingToEnd) loading = onAppendItems()
     }
+
+
+// abstract fun onPrependItems() : Boolean
+
     abstract fun onAppendItems() : Boolean
-    abstract fun onPrependItems() : Boolean
 }

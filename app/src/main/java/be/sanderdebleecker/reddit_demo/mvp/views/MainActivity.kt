@@ -13,7 +13,7 @@ import be.sanderdebleecker.reddit_demo.di.modules.MainModule
 import be.sanderdebleecker.reddit_demo.mvp.models.data.RThread
 import be.sanderdebleecker.reddit_demo.mvp.presenters.MainPresenter
 import be.sanderdebleecker.reddit_demo.mvp.views.adapters.ThreadsAdapter
-import be.sanderdebleecker.reddit_demo.mvp.views.adapters.scrollers.ScrollListener
+import be.sanderdebleecker.reddit_demo.mvp.views.adapters.scrollers.BufferedInfiniteScrollListener
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -67,13 +67,13 @@ class MainActivity constructor() : BaseActivity(), MainView {
                 Timber.d(".ThreadScrollListener is blocking prepends now")
             }
         }
+        scrollListener.adapterStoppedLoading()
     }
     override fun clearThreads() {
         mAdapter.clear()
         scrollListener.isBlockingAppend = false
         scrollListener.isBlockingPrepend = false
     }
-
 
     //BaseActivity
     override fun getContentView(): Int = R.layout.activity_main
@@ -88,7 +88,7 @@ class MainActivity constructor() : BaseActivity(), MainView {
     }
 
     //ScrollListener
-    inner class ThreadsScrollListener(linearLayoutManager: LinearLayoutManager) : ScrollListener(linearLayoutManager) {
+    inner class ThreadsScrollListener(linearLayoutManager: LinearLayoutManager) : BufferedInfiniteScrollListener(linearLayoutManager) {
         override var isBlockingAppend: Boolean = false
         override var isBlockingPrepend: Boolean = true
 
@@ -97,11 +97,11 @@ class MainActivity constructor() : BaseActivity(), MainView {
             Timber.d("scrolled up and requesting more items")
             return mPresenter.getThreads(after=THREAD_PREFIX+mAdapter.lastId,limit=LIMIT,count=mAdapter.itemCount)
         }
-
         override fun onPrependItems(): Boolean {
             //isBlockingAppend= false
             Timber.d("scrolled down and requesting more items")
             return mPresenter.getThreads(before=THREAD_PREFIX+mAdapter.firstId,limit=LIMIT,count=mAdapter.itemCount)
         }
+
     }
 }
