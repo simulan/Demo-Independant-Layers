@@ -8,5 +8,6 @@ import be.sanderdebleecker.reddit_demo.mvp.models.data.RThread
  * @since 11/06/2017
  */
 interface MainView : BaseView {
-    fun  showThreads(threads: MutableList<RThread>)
+    fun showThreads(threads: List<RThread>, append: Boolean)
+    fun clearThreads()
 }

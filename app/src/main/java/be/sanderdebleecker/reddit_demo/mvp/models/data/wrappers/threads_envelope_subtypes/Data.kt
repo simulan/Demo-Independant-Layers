@@ -1,4 +1,4 @@
-package be.sanderdebleecker.reddit_demo.mvp.models.json.threads_envelope_subtypes
+package be.sanderdebleecker.reddit_demo.mvp.models.data.wrappers.threads_envelope_subtypes
 
 import com.google.gson.annotations.SerializedName
 
@@ -41,6 +41,8 @@ class Data {
     var downs: Long? = null
     @SerializedName("edited")
     var edited: String? = null
+    @SerializedName("facets")
+    var facets: Facets? = null
     @SerializedName("gilded")
     var gilded: Long? = null
     @SerializedName("hidden")

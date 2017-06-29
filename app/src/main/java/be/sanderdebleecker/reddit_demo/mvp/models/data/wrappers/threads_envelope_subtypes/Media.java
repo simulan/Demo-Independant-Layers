@@ -1,5 +1,5 @@
 
-package be.sanderdebleecker.reddit_demo.mvp.models.json.threads_envelope_subtypes;
+package be.sanderdebleecker.reddit_demo.mvp.models.data.wrappers.threads_envelope_subtypes;
 
 import com.google.gson.annotations.SerializedName;
 

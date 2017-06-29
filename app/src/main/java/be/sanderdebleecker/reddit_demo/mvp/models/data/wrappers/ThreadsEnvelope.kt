@@ -1,7 +1,7 @@
-package be.sanderdebleecker.reddit_demo.mvp.models.json
+package be.sanderdebleecker.reddit_demo.mvp.models.data.wrappers
 
 import be.sanderdebleecker.reddit_demo.mvp.models.data.RThread
-import be.sanderdebleecker.reddit_demo.mvp.models.json.threads_envelope_subtypes.Data
+import be.sanderdebleecker.reddit_demo.mvp.models.data.wrappers.threads_envelope_subtypes.Data
 import com.google.gson.annotations.SerializedName
 
 class ThreadsEnvelope {
@@ -18,10 +18,10 @@ class ThreadsEnvelope {
             thread.id = it.data!!.id ?: ""
             thread.title = it.data!!.title ?:  ""
             thread.author = it.data!!.author ?:  ""
-            thread.text = it.data!!.selftext ?:  ""
-            thread.origin = it.data!!.permalink ?:  ""
-            thread.ref = it.data!!.url ?:  ""
-
+           // thread.text = it.data!!.selftext ?:  ""
+            //thread.origin = it.data!!.permalink ?:  ""
+            //thread.ref = it.data!!.url ?:  ""
+            thread.score = it.data!!.score ?: 0L
             thread.thumbnail = RThread.Thumbnail(Pair(it.data!!.thumbnailWidth ?:0, it.data!!.thumbnailHeight ?:0), it.data!!.thumbnail ?: "")
             threads.add(thread)
         }

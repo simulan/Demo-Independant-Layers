@@ -1,6 +1,10 @@
 package be.sanderdebleecker.reddit_demo.di.modules
 
 import android.content.Context
+import be.sanderdebleecker.reddit_demo.mvp.models.data.RThread
+import be.sanderdebleecker.reddit_demo.mvp.models.type_adapters.RThreadCollectionDeserializer
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -27,7 +31,9 @@ class ApplicationModule(private val mContext: Context) {
     @Singleton
     @Provides
     fun provideGsonConverterFactory(): GsonConverterFactory {
-        return GsonConverterFactory.create()
+        val gson : Gson = GsonBuilder().registerTypeAdapter(Array<RThread>::class.java,RThreadCollectionDeserializer())
+                .create()
+        return GsonConverterFactory.create(gson)
     }
 
     @Singleton

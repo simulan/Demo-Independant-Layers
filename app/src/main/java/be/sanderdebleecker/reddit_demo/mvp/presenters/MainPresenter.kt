@@ -1,7 +1,8 @@
 package be.sanderdebleecker.reddit_demo.mvp.presenters
 
-import be.sanderdebleecker.reddit_demo.da.apis.IRedditService
-import be.sanderdebleecker.reddit_demo.mvp.models.json.ThreadsEnvelope
+import android.support.v7.widget.SearchView
+import be.sanderdebleecker.reddit_demo.da.apis.IRedditApi
+import be.sanderdebleecker.reddit_demo.mvp.models.data.RThread
 import be.sanderdebleecker.reddit_demo.mvp.views.MainView
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,29 +16,36 @@ import javax.inject.Inject
  * @since 11/06/2017
  */
 
-open class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
-    @Inject protected lateinit var service : IRedditService
+open class MainPresenter @Inject constructor() : BasePresenter<MainView>(), SearchView.OnQueryTextListener, SearchView.OnCloseListener  {
+    @Inject protected lateinit var api: IRedditApi
+    var prevCommand: Command = Command.NEW
+    var command: Command = Command.NEW
     var threadsObserver : ThreadsObserver? = null
 
-    fun getThreads() {
-        threadsObserver = ThreadsObserver()
-        service.listPosts().subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(threadsObserver)
-    }
-    fun getThreads(after : String,limit : Int,count : Int) : Boolean {
-        val loading = threadsObserver!=null
-        if(!loading) {
+
+    fun getThreads(command: Command = this.command,before : String="",after : String="",limit : Int=20,count : Int=0,query: String="",restrict_sr : Boolean=true) : Boolean{
+        if(threadsObserver==null) {
             threadsObserver = ThreadsObserver()
-            service.listPosts(after = after,limit = limit,count = count).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(threadsObserver)
+            when(command) {
+                Command.NEW -> {
+                    if(before!="") api.listThreadsBefore(before = before,limit = limit,count = count).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(threadsObserver)
+                    else api.listThreads(after = after,limit = limit,count = count).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(threadsObserver)
+                }
+                Command.SEARCH -> api.searchThreads(after = after,limit = limit,count = count,q=query,restrict_sr = restrict_sr).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(threadsObserver)
+            }
+            return true
+        }else {
+            return false
         }
-        return loading
     }
 
     // stream handlers
-    inner class ThreadsObserver : Observer<ThreadsEnvelope> {
+    open inner class ThreadsObserver(val append : Boolean = true) : Observer<Array<RThread>> {
         lateinit var streamDisposer : Disposable
-        override fun onNext(t: ThreadsEnvelope?) {
+        //mode
+        override fun onNext(t: Array<RThread>?) {
             if(t != null) {
-                getView().showThreads(t.viewable())
+                getView().showThreads(t.asList(),append)
             }
         }
         override fun onComplete() {
@@ -53,4 +61,48 @@ open class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
     }
 
 
+    /**
+     * Interface DataListSource
+      */
+    /**
+     * Interface SearchView.OnQueryListener
+     * removes current data
+     * remembers previous command
+     * loads search command
+     */
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return true
+    }
+    override fun onQueryTextChange(newText: String?): Boolean {
+        resetRequests()
+        if(command != Command.SEARCH) {
+            prevCommand = command
+            command = Command.SEARCH
+        }
+        getView().clearThreads()
+        getThreads(query= newText?:"")
+        return true
+    }
+
+    /**
+     * Interface SearchView.OnCloseListener
+     * removes current data
+     * loads previous data
+     */
+    override fun onClose(): Boolean {
+        resetRequests()
+        command = prevCommand
+        getView().clearThreads()
+        getThreads()
+        return false
+    }
+    private fun resetRequests() {
+        threadsObserver?.streamDisposer?.dispose()
+        threadsObserver=null
+    }
 }
+enum class Command {
+    NEW,
+    SEARCH
+}
+

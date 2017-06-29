@@ -1,4 +1,4 @@
-package be.sanderdebleecker.reddit_demo.mvp.models.json
+package be.sanderdebleecker.reddit_demo.mvp.models.data.wrappers
 
 import java.io.Serializable
 
