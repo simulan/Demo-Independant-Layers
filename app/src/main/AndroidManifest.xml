@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="be.sanderdebleecker.reddit_demo">
+          package="be.simulan.reddit_demo">
 
     <application
         android:allowBackup="true"
@@ -10,8 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name="be.sanderdebleecker.reddit_demo.RedditApplication">
-        <activity android:name=".mvp.views.MainActivity" android:launchMode="singleTask">
+        android:name="be.simulan.reddit_demo.RedditApplication">
+        <activity android:name="be.simulan.reddit_demo.mvp.views.MainActivity" android:launchMode="singleTask">
             <intent-filter android:autoVerify="true"
                            tools:targetApi="m">
                 <action android:name="android.intent.action.VIEW" />
