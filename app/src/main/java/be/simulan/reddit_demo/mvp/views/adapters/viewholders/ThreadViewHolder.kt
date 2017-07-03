@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.row_thread.view.*
 /**
  * @author Simulan
  * @version 1.0.0
- * @since 19/06/2017
+* @since 19/06/2017
  */
 
 val gradBlue1 = intArrayOf(0xFF3d6883.toInt(), 0xFFaccbe9.toInt())

@@ -1,30 +1,47 @@
 package be.simulan.reddit_demo.mvp.views.adapters
 
-import be.simulan.reddit_demo.BuildConfig
+import android.support.v7.widget.RecyclerView
+import be.simulan.reddit_demo.CustomRunner
+import be.simulan.reddit_demo.R
 import be.simulan.reddit_demo.mvp.models.data.RThread
 import be.simulan.reddit_demo.mvp.views.MainActivity
+import be.simulan.reddit_demo.mvp.views.adapters.viewholders.ThreadViewHolder
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.android.controller.ActivityController
-import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-@Config(sdk = intArrayOf(25), constants = BuildConfig::class)
+@RunWith(CustomRunner::class)
 class ThreadsAdapterTest {
-
     @Test fun activity() {
-        val activity = Robolectric.buildActivity(MainActivity::class.java)
-        Assert.assertNotNull(activity.get())
+        val activityController = Robolectric.buildActivity(MainActivity::class.java)
+        val activity = activityController.get()
+        Assert.assertNotNull(activity)
     }
+    @Test fun getViewHolder() {
+        val activityController : ActivityController<MainActivity> = Robolectric.buildActivity(MainActivity::class.java)
+        val activity = activityController.get()
+        val adapter = ThreadsAdapter()
+        val recycler = activity.findViewById(R.id.recycler) as RecyclerView
+        val layoutId = R.layout.row_thread
 
+        val thread = RThread()
+        thread.title = "threadName"
+
+        recycler.adapter = adapter
+        adapter.add(listOf(thread))
+        try{
+            val vh : ThreadViewHolder = adapter.onCreateViewHolder(recycler,layoutId) as ThreadViewHolder
+            assert(true)
+        }catch(exception : Exception) {
+            assert(false)
+        }
+    }
     @Test fun getItemCount() {
         val adapter = ThreadsAdapter()
         assert(adapter.itemCount==0)
     }
-
     @Test fun add() {
         val adapter = ThreadsAdapter()
         val threads = listOf(RThread())
@@ -48,9 +65,4 @@ class ThreadsAdapterTest {
         adapter.add(threads)
         assert(adapter.getLastId() == id)
     }
-
-
-
-
-
 }
