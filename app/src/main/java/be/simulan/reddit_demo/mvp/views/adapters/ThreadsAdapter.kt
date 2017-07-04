@@ -30,7 +30,7 @@ class ThreadsAdapter() : RecyclerView.Adapter<ThreadViewHolder>(),ThreadsArrayLi
         notifyItemRangeRemoved(0,prevItemCount)
     }
     override fun getLastId() : String {
-        return list.last().id
+        return if(list.isNotEmpty()) list.last().id else ""
     }
 }
 

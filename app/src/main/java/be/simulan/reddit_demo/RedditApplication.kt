@@ -13,7 +13,7 @@ import timber.log.Timber
  * @version 1.0.0
  * @since 11/06/2017
  */
-class RedditApplication : Application() {
+open class RedditApplication : Application() {
     private lateinit var mApplicationComponent: ApplicationComponent;
 
     override fun onCreate() {

@@ -25,9 +25,11 @@ class MainActivity constructor() : BaseActivity(), MainView {
     private lateinit var scrollListener: ThreadsScrollListener
     private val THREAD_PREFIX = "t3_"
     private val LIMIT = 10
+    var calledOnViewReady = false
 
     //LC
     override fun onViewReady(savedInstanceState: Bundle?, intent: Intent) {
+        calledOnViewReady =true
         super.onViewReady(savedInstanceState, intent)
         val layoutManager: LinearLayoutManager = LinearLayoutManager(this)
         scrollListener = ThreadsScrollListener(layoutManager)
@@ -35,6 +37,7 @@ class MainActivity constructor() : BaseActivity(), MainView {
         recycler.layoutManager = layoutManager
         mPresenter.getThreads()
         recycler.addOnScrollListener(scrollListener)
+
         Timber.d("${this.javaClass}'s View Loaded")
     }
 
