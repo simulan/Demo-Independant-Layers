@@ -16,13 +16,12 @@ class ThreadsAdapterTest : AndroidTest() {
         val adapter = ThreadsAdapter()
         val recycler = activity.findViewById(R.id.recycler) as RecyclerView
         val layoutId = R.layout.row_thread
-
         val thread = RThread()
         thread.title = "threadName"
-
         recycler.adapter = adapter
         val list = listOf(thread)
         adapter.add(list)
+
         try {
             val vh: ThreadViewHolder = adapter.onCreateViewHolder(recycler, layoutId) as ThreadViewHolder
             assert(vh is ThreadViewHolder)
