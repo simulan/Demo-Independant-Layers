@@ -11,30 +11,30 @@ import be.simulan.reddit_demo.R
 import be.simulan.reddit_demo.di.components.DaggerThreadsComponent
 import be.simulan.reddit_demo.di.modules.ThreadsModule
 import be.simulan.reddit_demo.mvp.models.data.RThread
-import be.simulan.reddit_demo.mvp.presenters.MainPresenter
+import be.simulan.reddit_demo.mvp.presenters.ThreadsPresenter
 import be.simulan.reddit_demo.mvp.views.adapters.ThreadsAdapter
 import be.simulan.reddit_demo.mvp.views.adapters.scrollers.EndlessScrollListener
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 import javax.inject.Inject
 
-
 class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
-    @Inject protected lateinit var mPresenter: MainPresenter
+    @Inject protected lateinit var mPresenter: ThreadsPresenter
     @Inject protected lateinit var mAdapter: ThreadsAdapter
     private lateinit var scrollListener: ThreadsScrollListener
 
     override fun onViewReady(savedInstanceState: Bundle?, intent: Intent) {
         super.onViewReady(savedInstanceState, intent)
+        initializeRecyclerView()
+        mPresenter.getThreads()
+        Timber.d("${this.javaClass}'s View Loaded")
+    }
+    private fun initializeRecyclerView() {
         val layoutManager: LinearLayoutManager = LinearLayoutManager(this)
         scrollListener = ThreadsScrollListener(layoutManager)
         recycler.adapter = mAdapter
         recycler.layoutManager = layoutManager
         recycler.addOnScrollListener(scrollListener)
-        mPresenter.getThreads()
-
-
-        Timber.d("${this.javaClass}'s View Loaded")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -50,17 +50,6 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
         //Here I will react to user giving permission in webpage (OAuth)
     }
 
-    override fun showThreads(threads: List<RThread>) {
-        Timber.d("${threads.size} threads added to adapter's list(${mAdapter.itemCount})")
-        mAdapter.add(threads)
-        if (threads.isEmpty()) {
-            Timber.d(".ThreadScrollListener blocking appends now")
-        }
-    }
-    override fun clearThreads() {
-        mAdapter.clear()
-    }
-
     override fun getContentView(): Int = R.layout.activity_main
     override fun resolveDaggerDependencies() {
         DaggerThreadsComponent.builder()
@@ -70,6 +59,14 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
     }
     override fun showToast(msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+    }
+
+    override fun showThreads(threads: List<RThread>) {
+        mAdapter.add(threads)
+        Timber.d("${threads.size} threads added to adapter's list(${mAdapter.itemCount})")
+    }
+    override fun clearThreads() {
+        mAdapter.clear()
     }
 
     inner class ThreadsScrollListener(linearLayoutManager: LinearLayoutManager) : EndlessScrollListener(linearLayoutManager) {

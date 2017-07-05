@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 enum class Command { NEW, SEARCH }
-open class MainPresenter @Inject constructor() : BasePresenter<ThreadsView>(), SearchView.OnQueryTextListener, SearchView.OnCloseListener  {
+open class ThreadsPresenter @Inject constructor() : BasePresenter<ThreadsView>(), SearchView.OnQueryTextListener, SearchView.OnCloseListener  {
     @Inject protected lateinit var api: IRedditApi
     var observer: ThreadsObserver? = null
     var previousCommand: Command = Command.NEW
@@ -43,7 +43,7 @@ open class MainPresenter @Inject constructor() : BasePresenter<ThreadsView>(), S
         }
         override fun onComplete() {
             streamDisposer.dispose()
-            this@MainPresenter.observer =null
+            this@ThreadsPresenter.observer =null
         }
         override fun onError(e: Throwable?) {
             getView().showToast(e!!.message!!)
@@ -80,5 +80,4 @@ open class MainPresenter @Inject constructor() : BasePresenter<ThreadsView>(), S
         getView().clearThreads()
         getThreads()
     }
-
 }
