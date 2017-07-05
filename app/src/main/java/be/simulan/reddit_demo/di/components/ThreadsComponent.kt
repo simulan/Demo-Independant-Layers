@@ -2,7 +2,7 @@ package be.simulan.reddit_demo.di.components
 
 import be.simulan.reddit_demo.di.modules.MainModule
 import be.simulan.reddit_demo.di.scopes.PerActivity
-import be.simulan.reddit_demo.mvp.views.MainActivity
+import be.simulan.reddit_demo.mvp.views.ThreadsActivity
 import dagger.Component
 
 /**
@@ -13,5 +13,5 @@ import dagger.Component
 @PerActivity
 @Component(modules = arrayOf(MainModule::class), dependencies = arrayOf(ApplicationComponent::class))
 interface MainComponent {
-    fun inject(activity: MainActivity)
+    fun inject(activity: ThreadsActivity)
 }
