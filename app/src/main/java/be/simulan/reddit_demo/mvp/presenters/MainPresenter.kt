@@ -3,14 +3,14 @@ package be.simulan.reddit_demo.mvp.presenters
 import android.support.v7.widget.SearchView
 import be.simulan.reddit_demo.da.apis.IRedditApi
 import be.simulan.reddit_demo.mvp.models.data.RThread
-import be.simulan.reddit_demo.mvp.views.MainView
+import be.simulan.reddit_demo.mvp.views.ThreadsView
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-open class MainPresenter @Inject constructor() : BasePresenter<MainView>(), SearchView.OnQueryTextListener, SearchView.OnCloseListener  {
+open class MainPresenter @Inject constructor() : BasePresenter<ThreadsView>(), SearchView.OnQueryTextListener, SearchView.OnCloseListener  {
     @Inject protected lateinit var api: IRedditApi
     var threadsObserver : ThreadsObserver? = null
     var prevCommand: Command = Command.NEW

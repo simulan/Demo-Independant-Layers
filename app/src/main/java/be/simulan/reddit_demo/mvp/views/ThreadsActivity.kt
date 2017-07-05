@@ -8,8 +8,8 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.widget.Toast
 import be.simulan.reddit_demo.R
-import be.simulan.reddit_demo.di.components.DaggerMainComponent
-import be.simulan.reddit_demo.di.modules.MainModule
+import be.simulan.reddit_demo.di.components.DaggerThreadsComponent
+import be.simulan.reddit_demo.di.modules.ThreadsModule
 import be.simulan.reddit_demo.mvp.models.data.RThread
 import be.simulan.reddit_demo.mvp.presenters.MainPresenter
 import be.simulan.reddit_demo.mvp.views.adapters.ThreadsAdapter
@@ -19,24 +19,20 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-class MainActivity constructor() : BaseActivity(), MainView {
+class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
     @Inject protected lateinit var mPresenter: MainPresenter
     @Inject protected lateinit var mAdapter: ThreadsAdapter
     private lateinit var scrollListener: ThreadsScrollListener
-    private val THREAD_PREFIX = "t3_"
-    private val LIMIT = 10
-    var calledOnViewReady = false
 
-    //LC
     override fun onViewReady(savedInstanceState: Bundle?, intent: Intent) {
-        calledOnViewReady =true
         super.onViewReady(savedInstanceState, intent)
         val layoutManager: LinearLayoutManager = LinearLayoutManager(this)
         scrollListener = ThreadsScrollListener(layoutManager)
         recycler.adapter = mAdapter
         recycler.layoutManager = layoutManager
-        mPresenter.getThreads()
         recycler.addOnScrollListener(scrollListener)
+        mPresenter.getThreads()
+
 
         Timber.d("${this.javaClass}'s View Loaded")
     }
@@ -49,14 +45,11 @@ class MainActivity constructor() : BaseActivity(), MainView {
         searchView.setOnCloseListener(mPresenter)
         return true
     }
-
-    //LCE
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         //Here I will react to user giving permission in webpage (OAuth)
     }
 
-    //MainView
     override fun showThreads(threads: List<RThread>) {
         Timber.d("${threads.size} threads added to adapter's list(${mAdapter.itemCount})")
         mAdapter.add(threads)
@@ -64,32 +57,27 @@ class MainActivity constructor() : BaseActivity(), MainView {
             Timber.d(".ThreadScrollListener blocking appends now")
         }
     }
-
     override fun clearThreads() {
         mAdapter.clear()
     }
 
-    //BaseActivity
     override fun getContentView(): Int = R.layout.activity_main
-
     override fun resolveDaggerDependencies() {
-        DaggerMainComponent.builder()
+        DaggerThreadsComponent.builder()
                 .applicationComponent(getApplicationComponent())
-                .mainModule(MainModule(this))
+                .threadsModule(ThreadsModule(this))
                 .build().inject(this)
     }
-
     override fun showToast(msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
 
-    //ScrollListener
     inner class ThreadsScrollListener(linearLayoutManager: LinearLayoutManager) : EndlessScrollListener(linearLayoutManager) {
-
         override fun onAppendItems(): Boolean {
-            //blockingPrepend= false
             Timber.d("scrolled up and requesting more items")
-            return mPresenter.getThreads(after = THREAD_PREFIX + mAdapter.getLastId(), limit = LIMIT, count = mAdapter.itemCount)
+            val thread_prefix = "t3_"
+            val limit = 10
+            return mPresenter.getThreads(after = thread_prefix + mAdapter.getLastId(), limit = limit, count = mAdapter.itemCount)
         }
 
     }

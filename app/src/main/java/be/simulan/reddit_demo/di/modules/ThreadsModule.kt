@@ -8,18 +8,11 @@ import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
 
-
-
-/**
- * @author Simulan
- * @version 1.0.0
- * @since 11/06/2017
- */
 @Module
-class MainModule(private val mView: ThreadsView) {
+class ThreadsModule(private val mView: ThreadsView) {
     @PerActivity
     @Provides
-    internal fun provideView() : ThreadsView {
+    internal fun provideView(): ThreadsView {
         return mView
     }
 
@@ -31,7 +24,7 @@ class MainModule(private val mView: ThreadsView) {
 
     @PerActivity
     @Provides
-    fun provideThreadsAdapter() : ThreadsAdapter {
+    fun provideThreadsAdapter(): ThreadsAdapter {
         return ThreadsAdapter()
     }
 }

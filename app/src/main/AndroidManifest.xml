@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           package="be.simulan.reddit_demo">
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name="be.simulan.reddit_demo.RedditApplication">
-        <activityFromController android:name="be.simulan.reddit_demo.mvp.views.MainActivity" android:launchMode="singleTask">
+        <activity android:name="be.simulan.reddit_demo.mvp.views.ThreadsActivity" android:launchMode="singleTask">
             <intent-filter android:autoVerify="true"
                            tools:targetApi="m">
                 <action android:name="android.intent.action.VIEW" />
@@ -25,7 +25,6 @@
                       android:path="/my_redirect"
                       android:pathPrefix="/reddit_login/"/>
             </intent-filter>
-        </activityFromController>
+        </activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
