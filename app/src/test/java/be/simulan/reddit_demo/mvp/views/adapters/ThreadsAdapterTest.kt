@@ -1,7 +1,7 @@
 package be.simulan.reddit_demo.mvp.views.adapters
 
 import be.simulan.reddit_demo.AndroidTest
-import be.simulan.reddit_demo.mvp.models.data.RThread
+import be.simulan.reddit_demo.mvp.models.data.ThreadHeader
 import org.junit.Test
 
 class ThreadsAdapterTest : AndroidTest() {
@@ -11,13 +11,13 @@ class ThreadsAdapterTest : AndroidTest() {
     }
     @Test fun add() {
         val adapter = ThreadsAdapter()
-        val threads = listOf(RThread())
+        val threads = listOf(ThreadHeader())
         adapter.add(threads)
         assert(adapter.itemCount == 1)
     }
     @Test fun clear() {
         val adapter = ThreadsAdapter()
-        val threads = listOf(RThread())
+        val threads = listOf(ThreadHeader())
         adapter.add(threads)
         adapter.clear()
         assert(adapter.itemCount == 0)
@@ -25,8 +25,8 @@ class ThreadsAdapterTest : AndroidTest() {
     @Test fun getLastId() {
         val adapter = ThreadsAdapter()
         val id = "last"
-        val first = RThread()
-        val second = RThread()
+        val first = ThreadHeader()
+        val second = ThreadHeader()
         val threads = listOf(first, second)
         second.id = id
         adapter.add(threads)

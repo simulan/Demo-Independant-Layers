@@ -10,7 +10,7 @@ import android.widget.Toast
 import be.simulan.reddit_demo.R
 import be.simulan.reddit_demo.di.components.DaggerThreadsComponent
 import be.simulan.reddit_demo.di.modules.ThreadsModule
-import be.simulan.reddit_demo.mvp.models.data.RThread
+import be.simulan.reddit_demo.mvp.models.data.ThreadHeader
 import be.simulan.reddit_demo.mvp.presenters.ThreadsPresenter
 import be.simulan.reddit_demo.mvp.views.adapters.ThreadsAdapter
 import be.simulan.reddit_demo.mvp.views.adapters.scrollers.EndlessScrollListener
@@ -61,7 +61,7 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
 
-    override fun showThreads(threads: List<RThread>) {
+    override fun showThreads(threads: List<ThreadHeader>) {
         adapter.add(threads)
         Timber.d("${threads.size} threads added to adapter's list(${adapter.itemCount})")
     }

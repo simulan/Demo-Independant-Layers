@@ -1,7 +1,7 @@
 package be.simulan.reddit_demo.mvp.models.data.lists
 
 import android.support.v7.util.SortedList
-import be.simulan.reddit_demo.mvp.models.data.RThread
+import be.simulan.reddit_demo.mvp.models.data.ThreadHeader
 import java.util.*
 
 
@@ -17,10 +17,10 @@ import java.util.*
 /**
  * Implementation of Reddit Threads Data Controller
  */
-class ThreadsList() : DataListListener<RThread> {
-     var items: SortedList<RThread> = SortedList(RThread::class.java, SortedThreadsCallBack())
+class ThreadsList() : DataListListener<ThreadHeader> {
+     var items: SortedList<ThreadHeader> = SortedList(ThreadHeader::class.java, SortedThreadsCallBack())
     private var listener: RecyclerAdapterListener? = null
-    private val comparator: Comparator<RThread> = ThreadsComparator()
+    private val comparator: Comparator<ThreadHeader> = ThreadsComparator()
 
     //P
     fun setListener(listener: RecyclerAdapterListener) {
@@ -32,18 +32,18 @@ class ThreadsList() : DataListListener<RThread> {
         return items.size()
     }
 
-    override fun get(i: Int): RThread {
+    override fun get(i: Int): ThreadHeader {
         return items.get(i)
     }
 
 
     //C ThreadsComparator
-    inner class ThreadsComparator : Comparator<RThread> {
-        override fun compare(o1: RThread?, o2: RThread?): Int = o1!!.title.compareTo(o2!!.title)
+    inner class ThreadsComparator : Comparator<ThreadHeader> {
+        override fun compare(o1: ThreadHeader?, o2: ThreadHeader?): Int = o1!!.title.compareTo(o2!!.title)
     }
 
     //C SortedList.Callback
-    inner class SortedThreadsCallBack : SortedList.Callback<RThread>() {
+    inner class SortedThreadsCallBack : SortedList.Callback<ThreadHeader>() {
         override fun onInserted(position: Int, count: Int) {
             listener?.notifyItemRangeInserted(position, count)
         }
@@ -60,9 +60,9 @@ class ThreadsList() : DataListListener<RThread> {
             listener?.notifyItemRangeChanged(position, count)
         }
 
-        override fun areItemsTheSame(p0: RThread?, p1: RThread?): Boolean = p0!!.id == p1!!.id
-        override fun compare(p0: RThread?, p1: RThread?): Int = comparator.compare(p0, p1)
-        override fun areContentsTheSame(p0: RThread?, p1: RThread?): Boolean = p0!!.title==p1!!.title
+        override fun areItemsTheSame(p0: ThreadHeader?, p1: ThreadHeader?): Boolean = p0!!.id == p1!!.id
+        override fun compare(p0: ThreadHeader?, p1: ThreadHeader?): Int = comparator.compare(p0, p1)
+        override fun areContentsTheSame(p0: ThreadHeader?, p1: ThreadHeader?): Boolean = p0!!.title==p1!!.title
     }
 
     //C Editor
@@ -92,8 +92,8 @@ class ThreadsList() : DataListListener<RThread> {
     fun removeAll() { items.clear() }
     */
 
-    fun filter(filter: Filter<RThread>): List<RThread> {
-        val list = mutableListOf<RThread>()
+    fun filter(filter: Filter<ThreadHeader>): List<ThreadHeader> {
+        val list = mutableListOf<ThreadHeader>()
         var i = 0
         val count = items.size()
         while (i < count) {

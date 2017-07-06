@@ -2,18 +2,18 @@ package be.simulan.reddit_demo.mvp.views.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import be.simulan.reddit_demo.mvp.models.data.RThread
+import be.simulan.reddit_demo.mvp.models.data.ThreadHeader
 import be.simulan.reddit_demo.mvp.views.adapters.viewholders.ThreadViewHolder
 
 class ThreadsAdapter() : RecyclerView.Adapter<ThreadViewHolder>(),ThreadsArrayList {
-    private var list = ArrayList<RThread>()
+    private var list = ArrayList<ThreadHeader>()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, index: Int): ThreadViewHolder? = ThreadViewHolder(viewGroup)
     override fun onBindViewHolder(vh: ThreadViewHolder?, index: Int) { vh?.bind(getItem(index)) }
     override fun getItemCount(): Int = list.size
-    private fun getItem(index: Int): RThread = list[index]
+    private fun getItem(index: Int): ThreadHeader = list[index]
 
-    override fun add(additions : List<RThread>) {
+    override fun add(additions : List<ThreadHeader>) {
         val prevItemCount : Int = itemCount
         list.addAll(additions)
         notifyItemRangeInserted(prevItemCount,additions.size)

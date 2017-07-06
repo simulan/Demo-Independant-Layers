@@ -1,6 +1,6 @@
 package be.simulan.reddit_demo.mvp.models.type_adapters
 
-import be.simulan.reddit_demo.mvp.models.data.RThread
+import be.simulan.reddit_demo.mvp.models.data.ThreadHeader
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -12,15 +12,15 @@ import java.lang.reflect.Type
  * @version 1.0.0
  * @since 28/06/2017
  */
-class RThreadDeserializer : JsonDeserializer<RThread> {
-    override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): RThread {
+class RThreadDeserializer : JsonDeserializer<ThreadHeader> {
+    override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): ThreadHeader {
         val obj = (json as JsonObject).getAsJsonObject("data")
-        val t : RThread = RThread()
+        val t : ThreadHeader = ThreadHeader()
         t.id = obj["id"].asString
         t.title = obj["title"].asString
         t.author = obj["author"].asString
         t.score = obj["score"].asLong
-        t.thumbnail = RThread.Thumbnail()
+        t.thumbnail = ThreadHeader.Thumbnail()
         t.thumbnail.url = obj["thumbnail"].asString
 
         //check JsonNull

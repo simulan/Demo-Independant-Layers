@@ -2,7 +2,7 @@ package be.simulan.reddit_demo.mvp.presenters
 
 import android.support.v7.widget.SearchView
 import be.simulan.reddit_demo.da.apis.IRedditApi
-import be.simulan.reddit_demo.mvp.models.data.RThread
+import be.simulan.reddit_demo.mvp.models.data.ThreadHeader
 import be.simulan.reddit_demo.mvp.views.ThreadsView
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -22,7 +22,7 @@ open class ThreadsPresenter @Inject constructor() : BasePresenter<ThreadsView>()
         if(observerIsAvailable()) {
             observer = ThreadsObserver()
             when(command) {
-                Command.NEW -> api.listThreads(after = after,limit = limit,count = count).subscribeOn(Schedulers.computation()).async()
+                Command.NEW -> api.listThreads(after = after,limit = limit,count = count).async()
                 Command.SEARCH -> api.searchThreads(after = after,limit = limit,count = count,q=query,restrict_sr = restrict_sr).async()
             }
             return true
@@ -30,13 +30,13 @@ open class ThreadsPresenter @Inject constructor() : BasePresenter<ThreadsView>()
             return false
         }
     }
-    private fun observerIsAvailable() = observer == null
-    private fun Observable<Array<RThread>>.async() = this.observeOn(AndroidSchedulers.mainThread()).subscribe(observer)
 
-    open inner class ThreadsObserver : Observer<Array<RThread>> {
+    private fun observerIsAvailable() = observer == null
+    private fun Observable<Array<ThreadHeader>>.async() = this.subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer)
+    open inner class ThreadsObserver : Observer<Array<ThreadHeader>> {
         lateinit var streamDisposer : Disposable
 
-        override fun onNext(t: Array<RThread>?) {
+        override fun onNext(t: Array<ThreadHeader>?) {
             if(t != null) {
                 getView().showThreads(t.asList())
             }

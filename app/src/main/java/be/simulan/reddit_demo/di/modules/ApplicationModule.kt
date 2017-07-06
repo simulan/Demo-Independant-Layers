@@ -1,7 +1,7 @@
 package be.simulan.reddit_demo.di.modules
 
 import android.content.Context
-import be.simulan.reddit_demo.mvp.models.data.RThread
+import be.simulan.reddit_demo.mvp.models.data.ThreadHeader
 import be.simulan.reddit_demo.mvp.models.type_adapters.RThreadCollectionDeserializer
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -30,7 +30,7 @@ class ApplicationModule(private val mContext: Context) {
     @Singleton
     @Provides
     fun provideGsonConverterFactory(): GsonConverterFactory {
-        val gson : Gson = GsonBuilder().registerTypeAdapter(Array<RThread>::class.java,RThreadCollectionDeserializer())
+        val gson : Gson = GsonBuilder().registerTypeAdapter(Array<ThreadHeader>::class.java,RThreadCollectionDeserializer())
                 .create()
         return GsonConverterFactory.create(gson)
     }
