@@ -19,20 +19,20 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
-    @Inject protected lateinit var mPresenter: ThreadsPresenter
-    @Inject protected lateinit var mAdapter: ThreadsAdapter
+    @Inject protected lateinit var presenter: ThreadsPresenter
+    @Inject protected lateinit var adapter: ThreadsAdapter
     private lateinit var scrollListener: ThreadsScrollListener
 
     override fun onViewReady(savedInstanceState: Bundle?, intent: Intent) {
         super.onViewReady(savedInstanceState, intent)
         initializeRecyclerView()
-        mPresenter.getThreads()
+        presenter.getThreads()
         Timber.d("${this.javaClass}'s View Loaded")
     }
     private fun initializeRecyclerView() {
         val layoutManager: LinearLayoutManager = LinearLayoutManager(this)
         scrollListener = ThreadsScrollListener(layoutManager)
-        recycler.adapter = mAdapter
+        recycler.adapter = adapter
         recycler.layoutManager = layoutManager
         recycler.addOnScrollListener(scrollListener)
     }
@@ -41,8 +41,8 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
         menuInflater.inflate(R.menu.threads_menu, menu)
         val searchItem = menu!!.findItem(R.id.action_search)
         val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
-        searchView.setOnQueryTextListener(mPresenter)
-        searchView.setOnCloseListener(mPresenter)
+        searchView.setOnQueryTextListener(presenter)
+        searchView.setOnCloseListener(presenter)
         return true
     }
     override fun onNewIntent(intent: Intent?) {
@@ -62,11 +62,11 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
     }
 
     override fun showThreads(threads: List<RThread>) {
-        mAdapter.add(threads)
-        Timber.d("${threads.size} threads added to adapter's list(${mAdapter.itemCount})")
+        adapter.add(threads)
+        Timber.d("${threads.size} threads added to adapter's list(${adapter.itemCount})")
     }
     override fun clearThreads() {
-        mAdapter.clear()
+        adapter.clear()
     }
 
     inner class ThreadsScrollListener(linearLayoutManager: LinearLayoutManager) : EndlessScrollListener(linearLayoutManager) {
@@ -74,7 +74,7 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
             Timber.d("scrolled up and requesting more items")
             val thread_prefix = "t3_"
             val limit = 10
-            return mPresenter.getThreads(after = thread_prefix + mAdapter.getLastId(), limit = limit, count = mAdapter.itemCount)
+            return presenter.getThreads(after = thread_prefix + adapter.getLastId(), limit = limit, count = adapter.itemCount)
         }
 
     }

@@ -5,12 +5,6 @@ import android.view.ViewGroup
 import be.simulan.reddit_demo.mvp.models.data.RThread
 import be.simulan.reddit_demo.mvp.views.adapters.viewholders.ThreadViewHolder
 
-/**
- * @author Simulan
- * @version 1.0.0
- * @since 16/06/2017
- */
-
 class ThreadsAdapter() : RecyclerView.Adapter<ThreadViewHolder>(),ThreadsArrayList {
     private var list = ArrayList<RThread>()
 
@@ -30,7 +24,7 @@ class ThreadsAdapter() : RecyclerView.Adapter<ThreadViewHolder>(),ThreadsArrayLi
         notifyItemRangeRemoved(0,prevItemCount)
     }
     override fun getLastId() : String {
-        return if(list.isNotEmpty()) list.last().id else ""
+        return list.last().id
     }
 }
 
