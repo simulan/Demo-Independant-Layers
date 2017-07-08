@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.widget.Toast
@@ -11,10 +12,11 @@ import be.simulan.reddit_demo.R
 import be.simulan.reddit_demo.di.components.DaggerThreadsComponent
 import be.simulan.reddit_demo.di.modules.ThreadsModule
 import be.simulan.reddit_demo.mvp.models.data.ThreadHeader
+import be.simulan.reddit_demo.mvp.models.data.ThumbnailOverlay
 import be.simulan.reddit_demo.mvp.presenters.ThreadsPresenter
 import be.simulan.reddit_demo.mvp.views.adapters.ThreadsAdapter
 import be.simulan.reddit_demo.mvp.views.adapters.scrollers.EndlessScrollListener
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_threads.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -25,16 +27,29 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
 
     override fun onViewReady(savedInstanceState: Bundle?, intent: Intent) {
         super.onViewReady(savedInstanceState, intent)
-        initializeRecyclerView()
+        initializeList()
+        initializeEvents()
         presenter.getThreads()
         Timber.d("${this.javaClass}'s View Loaded")
     }
-    private fun initializeRecyclerView() {
+    private fun initializeList() {
         val layoutManager: LinearLayoutManager = LinearLayoutManager(this)
         scrollListener = ThreadsScrollListener(layoutManager)
         recycler.adapter = adapter
-        recycler.layoutManager = layoutManager
+        recycler.layoutManager = layoutManager as RecyclerView.LayoutManager
         recycler.addOnScrollListener(scrollListener)
+    }
+    private fun initializeEvents() {
+        adapter.getClickSubject().subscribe( {
+            val id = it.getThreadId()
+            if(it.isThumbnailClicked())
+                presenter.getThumbnail(id)
+            else
+                getThread(id)
+        })
+    }
+    private fun getThread(id : String) {
+        TODO("Launch ThreadActivity")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -50,7 +65,7 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
         //Here I will react to user giving permission in webpage (OAuth)
     }
 
-    override fun getContentView(): Int = R.layout.activity_main
+    override fun getContentView(): Int = R.layout.activity_threads
     override fun resolveDaggerDependencies() {
         DaggerThreadsComponent.builder()
                 .applicationComponent(getApplicationComponent())
@@ -61,6 +76,9 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
 
+    override fun showThumbnail(t: ThumbnailOverlay) {
+        
+    }
     override fun showThreads(threads: List<ThreadHeader>) {
         adapter.add(threads)
         Timber.d("${threads.size} threads added to adapter's list(${adapter.itemCount})")

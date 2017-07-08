@@ -43,7 +43,7 @@ package be.simulan.reddit_demo.da
             }
         })
         return object : Observable<Pair<String, String>>() {
-            override fun subscribeActual(observer: Observer<in Pair<String, String>>?) {
+            override fun subscribeActual(threadsObserver: Observer<in Pair<String, String>>?) {
                 TODO("not implemented")
             }
         }

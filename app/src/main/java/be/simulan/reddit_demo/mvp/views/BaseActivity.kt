@@ -8,13 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import be.simulan.reddit_demo.RedditApplication
 import be.simulan.reddit_demo.di.components.ApplicationComponent
 
-/**
- * @author Simulan
- * @version 1.0.0
- * @since 12/06/2017
- */
 open class BaseActivity : AppCompatActivity() {
-    //LC
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState )
         setContentView(getContentView())
@@ -24,8 +18,6 @@ open class BaseActivity : AppCompatActivity() {
     protected open fun onViewReady(savedInstanceState: Bundle?,intent: Intent) {
         resolveDaggerDependencies()
     }
-
-    //Application
     protected fun getApplicationComponent(): ApplicationComponent {
         val application: Application = application
         if (application is RedditApplication) {
@@ -35,11 +27,7 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    //To override
     open fun resolveDaggerDependencies() {
-        //can be empty
     }
-    open fun getContentView() : Int {
-        TODO("implement")
-    }
+    open fun getContentView() : Int = throw UnsupportedOperationException("Extends BaseActivity, requires getContentView():Int override ")
 }

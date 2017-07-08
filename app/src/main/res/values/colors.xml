@@ -4,8 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#6c27b6</color>
 
-
-
     <color name="colorBlue1">#accbe9</color>
     <color name="colorBlue2">#8ebfe7</color>
     <color name="colorBlue3">#67baf4</color>
@@ -13,5 +11,6 @@
     <color name="colorBlue5">#0d85d7</color>
 
     <color name="colorBlueBG">#3d6883</color>
-
+    <color name="colorOpaqueBlack">#AA000000</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

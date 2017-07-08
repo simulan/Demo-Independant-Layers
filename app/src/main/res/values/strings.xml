@@ -3,4 +3,5 @@
     <string name="reddit_login">Reddit Login</string>
     <string name="threads_menu_search">Search</string>
     <string name="threads_menu_sort">Sort</string>
+    <string name="description_thumbnail">Thumbnail of subject.</string>
 </resources>

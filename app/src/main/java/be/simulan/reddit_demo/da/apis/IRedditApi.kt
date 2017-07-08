@@ -1,12 +1,13 @@
 package be.simulan.reddit_demo.da.apis
 
 import be.simulan.reddit_demo.mvp.models.data.ThreadHeader
+import be.simulan.reddit_demo.mvp.models.data.ThumbnailOverlay
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-//Threads ID is prefixed by t3_
+//ThreadID is prefixed by t3_
 
 interface IRedditApi {
     @GET("/r/{sub}/new.json?")
@@ -21,4 +22,6 @@ interface IRedditApi {
                       @Query("after") after : String,
                       @Query("limit") limit : Int=1,
                       @Query("count") count : Int) : Observable<Array<ThreadHeader>>
+    @GET("/by_id/{id}.json?")
+    fun getThumbnailById(@Path("id") id : String) : Observable<ThumbnailOverlay>
 }
