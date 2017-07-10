@@ -6,17 +6,19 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import be.simulan.reddit_demo.R
-import be.simulan.reddit_demo.mvp.models.data.ThreadHeader
+import be.simulan.reddit_demo.mvp.models.data.ThreadItem
 import com.jakewharton.rxbinding2.view.RxView
 import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.row_thread.view.*
 
-class ThreadViewHolder(view: View) : RecyclerView.ViewHolder(view), ThreadHeaderView {
+private val THREAD_PREFIX = "t3_"
+
+class ThreadItemViewHolder(view: View) : RecyclerView.ViewHolder(view), ThreadItemView {
     private var threadId : String = ""
     private val gradientType = GradientDrawable.Orientation.BOTTOM_TOP
 
-    fun bind(item: ThreadHeader) = with(itemView) {
+    fun bind(item: ThreadItem) = with(itemView) {
         threadId = item.id
         title.text = item.title
         author.text = item.author
@@ -42,6 +44,6 @@ class ThreadViewHolder(view: View) : RecyclerView.ViewHolder(view), ThreadHeader
 
     override fun getThumbnailClicks() : Observable<String> = RxView.clicks(itemView.thumbnail).map { getThreadId() }
     override fun getThreadClicks() : Observable<String> = RxView.clicks(itemView.thread).map { getThreadId() }
-    override fun getThreadId(): String = threadId
+    override fun getThreadId(): String = THREAD_PREFIX+threadId
 }
 

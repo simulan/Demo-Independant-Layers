@@ -1,6 +1,6 @@
 package be.simulan.reddit_demo.mvp.views.adapters
 
-import be.simulan.reddit_demo.mvp.models.data.ThreadHeader
+import be.simulan.reddit_demo.mvp.models.data.ThreadItem
 
 /**
  * @author Simulan
@@ -8,7 +8,7 @@ import be.simulan.reddit_demo.mvp.models.data.ThreadHeader
  * @since 02/07/2017
  */
 interface ThreadsArrayList {
-    fun add(additions : List<ThreadHeader>)
+    fun add(additions : List<ThreadItem>)
     fun clear()
     fun getLastId() : String
 }

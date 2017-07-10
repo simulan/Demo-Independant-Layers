@@ -11,7 +11,7 @@ import android.widget.Toast
 import be.simulan.reddit_demo.R
 import be.simulan.reddit_demo.di.components.DaggerThreadsComponent
 import be.simulan.reddit_demo.di.modules.ThreadsModule
-import be.simulan.reddit_demo.mvp.models.data.ThreadHeader
+import be.simulan.reddit_demo.mvp.models.data.ThreadItem
 import be.simulan.reddit_demo.mvp.models.data.ThumbnailOverlay
 import be.simulan.reddit_demo.mvp.presenters.ThreadsPresenter
 import be.simulan.reddit_demo.mvp.views.adapters.ThreadsAdapter
@@ -40,16 +40,11 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
         recycler.addOnScrollListener(scrollListener)
     }
     private fun initializeEvents() {
-        adapter.getClickSubject().subscribe( {
-            val id = it.getThreadId()
-            if(it.isThumbnailClicked())
-                presenter.getThumbnail(id)
-            else
-                getThread(id)
-        })
+        adapter.getThreadClickSubject().subscribe { getThread(it) }
+        adapter.getThumbnailClickSubject().subscribe { presenter.getThumbnail( it ) }
     }
     private fun getThread(id : String) {
-        TODO("Launch ThreadActivity")
+        //TODO("Launch ThreadActivity")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -76,10 +71,10 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
 
-    override fun showThumbnail(t: ThumbnailOverlay) {
-        
+    override fun showThumbnail(thumbnailOverlay: ThumbnailOverlay) {
+        container.inflate(R.layout.overlay_thumbnail,true)
     }
-    override fun showThreads(threads: List<ThreadHeader>) {
+    override fun showThreads(threads: List<ThreadItem>) {
         adapter.add(threads)
         Timber.d("${threads.size} threads added to adapter's list(${adapter.itemCount})")
     }

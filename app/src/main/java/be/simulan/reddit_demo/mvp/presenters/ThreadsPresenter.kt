@@ -2,7 +2,7 @@ package be.simulan.reddit_demo.mvp.presenters
 
 import android.support.v7.widget.SearchView
 import be.simulan.reddit_demo.da.apis.IRedditApi
-import be.simulan.reddit_demo.mvp.models.data.ThreadHeader
+import be.simulan.reddit_demo.mvp.models.data.ThreadItem
 import be.simulan.reddit_demo.mvp.models.data.ThumbnailOverlay
 import be.simulan.reddit_demo.mvp.views.ThreadsView
 import io.reactivex.Observable
@@ -16,7 +16,7 @@ enum class Command { NEW, SEARCH }
 open class ThreadsPresenter @Inject constructor() : BasePresenter<ThreadsView>(), SearchView.OnQueryTextListener, SearchView.OnCloseListener  {
     @Inject protected lateinit var api: IRedditApi
     var threadsObserver: ThreadsObserver? = null
-    var thumbnailObserver : ThreadsObserver? = null
+    var thumbnailObserver : ThumbnailObserver? = null
     var previousCommand: Command = Command.NEW
     var command: Command = Command.NEW
 
@@ -24,21 +24,28 @@ open class ThreadsPresenter @Inject constructor() : BasePresenter<ThreadsView>()
         if(threadObserverIsAvailable()) {
             threadsObserver = ThreadsObserver()
             when(command) {
-                Command.NEW -> api.listThreads(after = after,limit = limit,count = count).async()
-                Command.SEARCH -> api.searchThreads(after = after,limit = limit,count = count,q=query,restrict_sr = restrict_sr).async()
+                Command.NEW -> api.listThreads(after = after,limit = limit,count = count).subscribeAsync(threadsObserver!!)
+                Command.SEARCH -> api.searchThreads(after = after,limit = limit,count = count,q=query,restrict_sr = restrict_sr).subscribeAsync(threadsObserver!!)
             }
             return true
         }else {
             return false
         }
     }
-
     private fun threadObserverIsAvailable() = threadsObserver == null
-    private fun Observable<Array<ThreadHeader>>.async() = this.subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(threadsObserver)
-    inner class ThreadsObserver : Observer<Array<ThreadHeader>> {
+    fun getThumbnail(id: String) {
+        if(thumbnailObserverIsAvailable()) {
+            thumbnailObserver = ThumbnailObserver()
+            api.getThumbnailById(id).subscribeAsync(thumbnailObserver!!)
+        }
+    }
+    private fun thumbnailObserverIsAvailable() = thumbnailObserver == null
+
+
+    inner class ThreadsObserver : Observer<Array<ThreadItem>> {
         lateinit var streamDisposer : Disposable
 
-        override fun onNext(t: Array<ThreadHeader>?) {
+        override fun onNext(t: Array<ThreadItem>?) {
             if(t != null) {
                 getView().showThreads(t.asList())
             }
@@ -67,7 +74,7 @@ open class ThreadsPresenter @Inject constructor() : BasePresenter<ThreadsView>()
         }
         override fun onComplete() {
             streamDisposer.dispose()
-            this@ThreadsPresenter.threadsObserver =null
+            this@ThreadsPresenter.thumbnailObserver = null
         }
         override fun onError(e: Throwable?) {
             getView().showToast(e!!.message!!)
@@ -102,7 +109,8 @@ open class ThreadsPresenter @Inject constructor() : BasePresenter<ThreadsView>()
         getThreads()
     }
 
-    fun  getThumbnail(id: String) {
-        api.getThumbnailById(id)
+
+    private fun <T : Any> Observable<T>.subscribeAsync(observer : Observer<T>) {
+        this.subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer)
     }
 }
