@@ -1,0 +1,120 @@
+{"kind": "Listing",
+  "data": {
+    "modhash": "v5kougvx9qa16bbe542d4980ed91f8845df38b1932d8302e52",
+    "children": [
+      {
+        "kind": "t3",
+        "data": {
+          "contest_mode": false,
+          "subreddit_name_prefixed": "r/androiddev",
+          "banned_by": null,
+          "media_embed": {},
+          "thumbnail_width": 140,
+          "subreddit": "androiddev",
+          "selftext_html": null,
+          "selftext": "",
+          "likes": null,
+          "suggested_sort": null,
+          "user_reports": [],
+          "secure_media": null,
+          "link_flair_text": null,
+          "id": "6mfabv",
+          "view_count": null,
+          "secure_media_embed": {},
+          "clicked": false,
+          "report_reasons": null,
+          "author": "ditn",
+          "saved": false,
+          "mod_reports": [],
+          "name": "t3_6mfabv",
+          "score": 2,
+          "approved_by": null,
+          "over_18": false,
+          "domain": "medium.com",
+          "hidden": false,
+          "preview": {
+            "images": [
+              {
+                "source": {
+                  "url": "https://i.redditmedia.com/0IKWltu6_EBZltgY6tO4MnWELYhOpNlIPSf2_2TRUcc.jpg?s=e7cea5fa21be83e06271477cec8a5f2c",
+                  "width": 1134,
+                  "height": 788
+                },
+                "resolutions": [
+                  {
+                    "url": "https://i.redditmedia.com/0IKWltu6_EBZltgY6tO4MnWELYhOpNlIPSf2_2TRUcc.jpg?fit=crop&amp;crop=faces%2Centropy&amp;arh=2&amp;w=108&amp;s=52920256025b397464c9a9b72b4f401b",
+                    "width": 108,
+                    "height": 75
+                  },
+                  {
+                    "url": "https://i.redditmedia.com/0IKWltu6_EBZltgY6tO4MnWELYhOpNlIPSf2_2TRUcc.jpg?fit=crop&amp;crop=faces%2Centropy&amp;arh=2&amp;w=216&amp;s=d23846202d61ab40cd14c5958b1a24bc",
+                    "width": 216,
+                    "height": 150
+                  },
+                  {
+                    "url": "https://i.redditmedia.com/0IKWltu6_EBZltgY6tO4MnWELYhOpNlIPSf2_2TRUcc.jpg?fit=crop&amp;crop=faces%2Centropy&amp;arh=2&amp;w=320&amp;s=a9d65f185b8e0aeb7f798e9f7a951f39",
+                    "width": 320,
+                    "height": 222
+                  },
+                  {
+                    "url": "https://i.redditmedia.com/0IKWltu6_EBZltgY6tO4MnWELYhOpNlIPSf2_2TRUcc.jpg?fit=crop&amp;crop=faces%2Centropy&amp;arh=2&amp;w=640&amp;s=896016fdbce2c6dd131232123612d31f",
+                    "width": 640,
+                    "height": 444
+                  },
+                  {
+                    "url": "https://i.redditmedia.com/0IKWltu6_EBZltgY6tO4MnWELYhOpNlIPSf2_2TRUcc.jpg?fit=crop&amp;crop=faces%2Centropy&amp;arh=2&amp;w=960&amp;s=b7080e3c106d5a58a77434b52acc4dbf",
+                    "width": 960,
+                    "height": 667
+                  },
+                  {
+                    "url": "https://i.redditmedia.com/0IKWltu6_EBZltgY6tO4MnWELYhOpNlIPSf2_2TRUcc.jpg?fit=crop&amp;crop=faces%2Centropy&amp;arh=2&amp;w=1080&amp;s=9d50f6fb8e209185d7a4c418cf40b3dc",
+                    "width": 1080,
+                    "height": 750
+                  }
+                ],
+                "variants": {},
+                "id": "IuOxoU52QKO5dkPs6CSXsNASsvKondpI37pN7KTVS2o"
+              }
+            ],
+            "enabled": false
+          },
+          "thumbnail": "https://b.thumbs.redditmedia.com/UvuOxpkDo-9NScDi0tPOKtJhq2o_s22yNX6J9vYBRHU.jpg",
+          "subreddit_id": "t5_2r26y",
+          "edited": false,
+          "link_flair_css_class": null,
+          "author_flair_css_class": "",
+          "gilded": 0,
+          "downs": 0,
+          "brand_safe": true,
+          "archived": false,
+          "removal_reason": null,
+          "post_hint": "link",
+          "can_gild": true,
+          "thumbnail_height": 97,
+          "hide_score": true,
+          "spoiler": false,
+          "permalink": "/r/androiddev/comments/6mfabv/synthetic_accessors_in_kotlin/",
+          "num_reports": null,
+          "locked": false,
+          "stickied": false,
+          "created": 1499730535.0,
+          "url": "https://medium.com/@iateyourmic/synthetic-accessors-in-kotlin-a60184afd94e",
+          "author_flair_text": "Blockchain.info",
+          "quarantine": false,
+          "title": "Synthetic Accessors in Kotlin",
+          "created_utc": 1499701735.0,
+          "distinguished": null,
+          "media": null,
+          "num_comments": 0,
+          "is_self": false,
+          "visited": false,
+          "subreddit_type": "public",
+          "is_video": false,
+          "ups": 2
+        }
+      }
+    ],
+    "after": null,
+    "before": null
+  }
+}
