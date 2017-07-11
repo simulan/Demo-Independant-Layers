@@ -12,10 +12,10 @@ class ArrayListTest {
     fun trimStart() {
         // arrange
         val arr : ArrayList<String> = arrayListOf("Tom","Helen","Dunley")
-        val sizeA = arr.size
+        val sizeA : Int = arr.size
         // act
         arr.removeAt(0)
-        var sizeB = arr.size
+        val sizeB : Int = arr.size
         // assert
         assert(sizeA!=sizeB)
     }

@@ -28,7 +28,7 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
     override fun onViewReady(savedInstanceState: Bundle?, intent: Intent) {
         super.onViewReady(savedInstanceState, intent)
         initializeList()
-        initializeEvents()
+        bindEvents()
         presenter.getThreads()
         Timber.d("${this.javaClass}'s View Loaded")
     }
@@ -39,12 +39,13 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
         recycler.layoutManager = layoutManager as RecyclerView.LayoutManager
         recycler.addOnScrollListener(scrollListener)
     }
-    private fun initializeEvents() {
+    private fun bindEvents() {
         adapter.getThreadClickSubject().subscribe { getThread(it) }
         adapter.getThumbnailClickSubject().subscribe { presenter.getThumbnail( it ) }
     }
+
     private fun getThread(id : String) {
-        //TODO("Launch ThreadActivity")
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
