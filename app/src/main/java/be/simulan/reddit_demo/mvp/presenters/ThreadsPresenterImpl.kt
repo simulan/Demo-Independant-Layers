@@ -2,9 +2,12 @@ package be.simulan.reddit_demo.mvp.presenters
 
 import android.support.v7.widget.SearchView
 import be.simulan.reddit_demo.da.apis.IRedditApi
+import be.simulan.reddit_demo.mvp.models.data.Category
 import be.simulan.reddit_demo.mvp.models.data.ThreadItem
 import be.simulan.reddit_demo.mvp.models.data.ThumbnailOverlay
+import be.simulan.reddit_demo.mvp.models.static.LIMIT
 import be.simulan.reddit_demo.mvp.views.ThreadsView
+import be.simulan.reddit_demo.mvp.views.adapters.ThreadsAdapter
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -12,29 +15,49 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-enum class Command { NEW, SEARCH }
-open class ThreadsPresenter @Inject constructor() : BasePresenter<ThreadsView>(), SearchView.OnQueryTextListener, SearchView.OnCloseListener  {
+open class ThreadsPresenterImpl @Inject constructor() : BasePresenter<ThreadsView>(), ThreadsPresenter, ThreadsProvider, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
     @Inject protected lateinit var api: IRedditApi
-    private var threadsObserver: ThreadsObserver? = null
-    private var thumbnailObserver : ThumbnailObserver? = null
-    private var previousCommand: Command = Command.NEW
-    private var command: Command = Command.NEW
+    @Inject protected lateinit var threadsAdapter: ThreadsAdapter
 
-    fun getThreads(command: Command = this.command,after : String="",limit : Int=20,count : Int=0,query: String="",restrict_sr : Boolean=true) : Boolean{
-        if(threadObserverIsAvailable()) {
+    private val threads = ArrayList<ThreadItem>()
+    private var threadsObserver: ThreadsObserver? = null
+    private var thumbnailObserver: ThumbnailObserver? = null
+    private var previousCategory: Category = Category.new
+    private var category: Category = Category.new
+    private var query : String = ""
+
+    override fun getAdapter(): ThreadsAdapter = threadsAdapter
+    override fun bindAdapter() {
+        bindViewHolderEvents()
+        threadsAdapter.setProvider(this)
+    }
+    private fun bindViewHolderEvents() {
+        threadsAdapter.getThreadClickSubject().subscribe { getView().showThread(it) }
+        threadsAdapter.getThumbnailClickSubject().subscribe { loadThumbnail(it) }
+    }
+
+    override fun loadThreads(): Boolean {
+        if (threadObserverIsAvailable()) {
             threadsObserver = ThreadsObserver()
-            when(command) {
-                Command.NEW -> api.listThreads(after = after,limit = limit,count = count).subscribeAsync(threadsObserver!!)
-                Command.SEARCH -> api.searchThreads(after = after,limit = limit,count = count,q=query,restrict_sr = restrict_sr).subscribeAsync(threadsObserver!!)
+            val lastId = getLastIdOrEmpty()
+            when (category) {
+                Category.search -> api.searchThreads(q=query,after = lastId,count=threads.size,restrict_sr = true)
+                else -> api.listThreads(after = lastId, limit = LIMIT, count = threads.size).subscribeAsync(threadsObserver!!)
             }
             return true
-        }else {
+        } else {
             return false
         }
     }
     private fun threadObserverIsAvailable() = threadsObserver == null
-    fun getThumbnail(id: String) {
-        if(thumbnailObserverIsAvailable()) {
+    private fun getLastIdOrEmpty() : String = threads.lastOrNull()?.id ?: ""
+    override fun switchCategory(newCategory: Category) {
+        previousCategory = category
+        category = newCategory
+    }
+
+    fun loadThumbnail(id: String) {
+        if (thumbnailObserverIsAvailable()) {
             thumbnailObserver = ThumbnailObserver()
             api.getThumbnailById(id).subscribeAsync(thumbnailObserver!!)
         }
@@ -42,55 +65,72 @@ open class ThreadsPresenter @Inject constructor() : BasePresenter<ThreadsView>()
     private fun thumbnailObserverIsAvailable() = thumbnailObserver == null
 
     inner class ThreadsObserver : Observer<Array<ThreadItem>> {
-        lateinit var streamDisposer : Disposable
+        lateinit var streamDisposer: Disposable
 
         override fun onNext(t: Array<ThreadItem>?) {
-            if(t != null) {
-                getView().showThreads(t.asList())
+            if (t != null) {
+                addThreads(t.asList())
             }
         }
+
         override fun onComplete() {
             streamDisposer.dispose()
-            this@ThreadsPresenter.threadsObserver =null
+            this@ThreadsPresenterImpl.threadsObserver = null
         }
+
         override fun onError(e: Throwable?) {
             getView().showToast(e!!.message!!)
         }
+
         override fun onSubscribe(d: Disposable?) {
             streamDisposer = d!!
         }
     }
     inner class ThumbnailObserver : Observer<ThumbnailOverlay> {
-        lateinit var streamDisposer : Disposable
+        lateinit var streamDisposer: Disposable
 
         override fun onNext(t: ThumbnailOverlay?) {
-            if(t != null) {
+            if (t != null) {
                 getView().showThumbnail(t)
             }
         }
+
         override fun onSubscribe(d: Disposable?) {
             streamDisposer = d!!
         }
+
         override fun onComplete() {
             streamDisposer.dispose()
-            this@ThreadsPresenter.thumbnailObserver = null
+            this@ThreadsPresenterImpl.thumbnailObserver = null
         }
+
         override fun onError(e: Throwable?) {
             getView().showToast(e!!.message!!)
         }
     }
 
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        return true
+    override fun getItem(position: Int): ThreadItem = threads[position]
+    override fun getItemCount(): Int = threads.size
+    private fun addThreads(additions: List<ThreadItem>) {
+        val oldSize = threads.size
+        threads.addAll(additions)
+        threadsAdapter.notifyItemRangeInserted(oldSize, additions.size)
     }
+    private fun clearThreads() {
+        val oldSize = threads.size
+        threads.clear()
+        threadsAdapter.notifyItemRangeRemoved(0,oldSize)
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean = true
     override fun onQueryTextChange(newText: String?): Boolean {
         cancelRequests()
-        if(command != Command.SEARCH) {
-            previousCommand = command
-            command = Command.SEARCH
+        if (category != Category.search) {
+            previousCategory = category
+            category = Category.search
         }
-        getView().clearThreads()
-        getThreads(query= newText?:"")
+        query = newText ?: ""
+        loadThreads()
         return true
     }
     override fun onClose(): Boolean {
@@ -100,15 +140,15 @@ open class ThreadsPresenter @Inject constructor() : BasePresenter<ThreadsView>()
     }
     private fun cancelRequests() {
         threadsObserver?.streamDisposer?.dispose()
-        threadsObserver =null
+        threadsObserver = null
     }
     private fun reset() {
-        command = previousCommand
-        getView().clearThreads()
-        getThreads()
+        category = previousCategory
+        clearThreads()
+        loadThreads()
     }
 
-    private fun <T : Any> Observable<T>.subscribeAsync(observer : Observer<T>) {
+    private fun <T : Any> Observable<T>.subscribeAsync(observer: Observer<T>) {
         this.subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer)
     }
 }

@@ -11,41 +11,30 @@ import android.widget.Toast
 import be.simulan.reddit_demo.R
 import be.simulan.reddit_demo.di.components.DaggerThreadsComponent
 import be.simulan.reddit_demo.di.modules.ThreadsModule
-import be.simulan.reddit_demo.mvp.models.data.ThreadItem
 import be.simulan.reddit_demo.mvp.models.data.ThumbnailOverlay
-import be.simulan.reddit_demo.mvp.presenters.ThreadsPresenter
-import be.simulan.reddit_demo.mvp.views.adapters.ThreadsAdapter
+import be.simulan.reddit_demo.mvp.presenters.ThreadsPresenterImpl
 import be.simulan.reddit_demo.mvp.views.adapters.scrollers.EndlessScrollListener
 import kotlinx.android.synthetic.main.activity_threads.*
 import timber.log.Timber
 import javax.inject.Inject
 
 class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
-    @Inject protected lateinit var presenter: ThreadsPresenter
-    @Inject protected lateinit var adapter: ThreadsAdapter
+    @Inject protected lateinit var presenter: ThreadsPresenterImpl
     private lateinit var scrollListener: ThreadsScrollListener
 
     override fun onViewReady(savedInstanceState: Bundle?, intent: Intent) {
         super.onViewReady(savedInstanceState, intent)
-        initializeList()
-        bindEvents()
-        presenter.getThreads()
+        initializeRecyclerView()
+        presenter.loadThreads()
         Timber.d("${this.javaClass}'s View Loaded")
     }
-    private fun initializeList() {
+    private fun initializeRecyclerView() {
         val layoutManager: LinearLayoutManager = LinearLayoutManager(this)
         scrollListener = ThreadsScrollListener(layoutManager)
-        recycler.adapter = adapter
+        recycler.adapter = presenter.getAdapter()
         recycler.layoutManager = layoutManager as RecyclerView.LayoutManager
         recycler.addOnScrollListener(scrollListener)
-    }
-    private fun bindEvents() {
-        adapter.getThreadClickSubject().subscribe { getThread(it) }
-        adapter.getThumbnailClickSubject().subscribe { presenter.getThumbnail( it ) }
-    }
-
-    private fun getThread(id : String) {
-
+        presenter.bindAdapter()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -74,21 +63,14 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
 
     override fun showThumbnail(thumbnailOverlay: ThumbnailOverlay) {
         container.inflate(R.layout.overlay_thumbnail,true)
+        TODO("create ThumbnailView Interface & Impl")
     }
-    override fun showThreads(threads: List<ThreadItem>) {
-        adapter.add(threads)
-        Timber.d("${threads.size} threads added to adapter's list(${adapter.itemCount})")
-    }
-    override fun clearThreads() {
-        adapter.clear()
-    }
+    override fun showThread(id: String) {}
 
     inner class ThreadsScrollListener(linearLayoutManager: LinearLayoutManager) : EndlessScrollListener(linearLayoutManager) {
         override fun onAppendItems(): Boolean {
             Timber.d("scrolled up and requesting more items")
-            val thread_prefix = "t3_"
-            val limit = 10
-            return presenter.getThreads(after = thread_prefix + adapter.getLastId(), limit = limit, count = adapter.itemCount)
+            return presenter.loadThreads()
         }
 
     }

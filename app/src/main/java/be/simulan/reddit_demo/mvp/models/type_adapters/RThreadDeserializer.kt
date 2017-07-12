@@ -17,7 +17,7 @@ class RThreadDeserializer : JsonDeserializer<ThreadItem> {
     override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): ThreadItem {
         val obj = (json as JsonObject).getAsJsonObject("data")
         val t : ThreadItem = ThreadItem()
-        t.id = obj["id"].asString
+        t.id = obj["name"].asString
         t.title = obj["title"].asString
         t.author = obj["author"].asString
         t.score = obj["score"].asLong

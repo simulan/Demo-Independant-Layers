@@ -12,7 +12,6 @@ import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.row_thread.view.*
 
-private val THREAD_PREFIX = "t3_"
 
 class ThreadItemViewHolder(view: View) : RecyclerView.ViewHolder(view), ThreadItemView {
     private var threadId : String = ""
@@ -44,6 +43,6 @@ class ThreadItemViewHolder(view: View) : RecyclerView.ViewHolder(view), ThreadIt
 
     override fun getThumbnailClicks() : Observable<String> = RxView.clicks(itemView.thumbnail).map { getThreadId() }
     override fun getThreadClicks() : Observable<String> = RxView.clicks(itemView.thread).map { getThreadId() }
-    override fun getThreadId(): String = THREAD_PREFIX+threadId
+    override fun getThreadId(): String = threadId
 }
 
