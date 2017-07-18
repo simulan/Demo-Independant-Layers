@@ -2,7 +2,7 @@ package be.simulan.reddit_demo.di.modules
 
 import android.content.Context
 import be.simulan.reddit_demo.mvp.models.data.ThreadItem
-import be.simulan.reddit_demo.mvp.models.data.ThumbnailOverlay
+import be.simulan.reddit_demo.mvp.models.data.ThumbnailItem
 import be.simulan.reddit_demo.mvp.models.type_adapters.RThreadCollectionDeserializer
 import be.simulan.reddit_demo.mvp.models.type_adapters.ThumbnailOverlayDeserializer
 import com.google.gson.Gson
@@ -34,7 +34,7 @@ class ApplicationModule(private val mContext: Context) {
     fun provideGsonConverterFactory(): GsonConverterFactory {
         val gson : Gson = GsonBuilder()
                 .registerTypeAdapter(Array<ThreadItem>::class.java,RThreadCollectionDeserializer())
-                .registerTypeAdapter(ThumbnailOverlay::class.java,ThumbnailOverlayDeserializer())
+                .registerTypeAdapter(ThumbnailItem::class.java,ThumbnailOverlayDeserializer())
                 .create()
         return GsonConverterFactory.create(gson)
     }

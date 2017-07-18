@@ -11,12 +11,11 @@ import android.widget.Toast
 import be.simulan.reddit_demo.R
 import be.simulan.reddit_demo.di.components.DaggerThreadsComponent
 import be.simulan.reddit_demo.di.modules.ThreadsModule
-import be.simulan.reddit_demo.mvp.models.data.ThumbnailOverlay
+import be.simulan.reddit_demo.mvp.models.data.ThumbnailItem
 import be.simulan.reddit_demo.mvp.presenters.ThreadsPresenterImpl
 import be.simulan.reddit_demo.mvp.views.adapters.scrollers.EndlessScrollListener
-import com.squareup.picasso.Picasso
+import be.simulan.reddit_demo.mvp.views.fragments.ThumbnailFragment
 import kotlinx.android.synthetic.main.activity_threads.*
-import kotlinx.android.synthetic.main.overlay_thumbnail.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -63,12 +62,11 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
 
-    override fun showThumbnail(thumbnailOverlay: ThumbnailOverlay) {
-        container.inflate(R.layout.overlay_thumbnail,true)
-        txtv_title.text = thumbnailOverlay.title
-        Picasso.with(this).load(thumbnailOverlay.thumbnail.url)
-                .placeholder(R.raw.placeholder)
-                .fit().centerCrop().into(imgv_thumbnail)
+    override fun showThumbnail(thumbnailItem: ThumbnailItem) {
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.container, ThumbnailFragment().setItem(thumbnailItem))
+                .commit()
     }
     override fun showThread(id: String) {}
 

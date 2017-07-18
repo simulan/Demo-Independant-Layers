@@ -4,7 +4,7 @@ import android.support.v7.widget.SearchView
 import be.simulan.reddit_demo.da.apis.IRedditApi
 import be.simulan.reddit_demo.mvp.models.data.Category
 import be.simulan.reddit_demo.mvp.models.data.ThreadItem
-import be.simulan.reddit_demo.mvp.models.data.ThumbnailOverlay
+import be.simulan.reddit_demo.mvp.models.data.ThumbnailItem
 import be.simulan.reddit_demo.mvp.models.static.LIMIT
 import be.simulan.reddit_demo.mvp.views.ThreadsView
 import be.simulan.reddit_demo.mvp.views.adapters.ThreadsAdapter
@@ -86,10 +86,10 @@ open class ThreadsPresenterImpl @Inject constructor() : BasePresenter<ThreadsVie
             streamDisposer = d!!
         }
     }
-    inner class ThumbnailObserver : Observer<ThumbnailOverlay> {
+    inner class ThumbnailObserver : Observer<ThumbnailItem> {
         lateinit var streamDisposer: Disposable
 
-        override fun onNext(t: ThumbnailOverlay?) {
+        override fun onNext(t: ThumbnailItem?) {
             if (t != null) {
                 getView().showThumbnail(t)
             }
