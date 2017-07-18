@@ -30,8 +30,8 @@ class ThreadsActivityTest : AndroidTest() {
     @Test
     fun listInitialized() {
         activity.onCreate(null, null)
-        assert(activity.recycler != null)
-        assert(activity.recycler.adapter != null)
+        assert(activity.recyclerview != null)
+        assert(activity.recyclerview.adapter != null)
     }
 
 

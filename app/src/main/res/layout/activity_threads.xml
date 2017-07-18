@@ -9,7 +9,7 @@
     tools:context="be.simulan.reddit_demo.mvp.views.ThreadsActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler"
+        android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

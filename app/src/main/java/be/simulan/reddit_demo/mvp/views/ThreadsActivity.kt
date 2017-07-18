@@ -14,7 +14,9 @@ import be.simulan.reddit_demo.di.modules.ThreadsModule
 import be.simulan.reddit_demo.mvp.models.data.ThumbnailOverlay
 import be.simulan.reddit_demo.mvp.presenters.ThreadsPresenterImpl
 import be.simulan.reddit_demo.mvp.views.adapters.scrollers.EndlessScrollListener
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_threads.*
+import kotlinx.android.synthetic.main.overlay_thumbnail.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -31,9 +33,9 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
     private fun initializeRecyclerView() {
         val layoutManager: LinearLayoutManager = LinearLayoutManager(this)
         scrollListener = ThreadsScrollListener(layoutManager)
-        recycler.adapter = presenter.getAdapter()
-        recycler.layoutManager = layoutManager as RecyclerView.LayoutManager
-        recycler.addOnScrollListener(scrollListener)
+        recyclerview.adapter = presenter.getAdapter()
+        recyclerview.layoutManager = layoutManager as RecyclerView.LayoutManager
+        recyclerview.addOnScrollListener(scrollListener)
         presenter.bindAdapter()
     }
 
@@ -63,7 +65,10 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
 
     override fun showThumbnail(thumbnailOverlay: ThumbnailOverlay) {
         container.inflate(R.layout.overlay_thumbnail,true)
-        TODO("create ThumbnailView Interface & Impl")
+        txtv_title.text = thumbnailOverlay.title
+        Picasso.with(this).load(thumbnailOverlay.thumbnail.url)
+                .placeholder(R.raw.placeholder)
+                .fit().centerCrop().into(imgv_thumbnail)
     }
     override fun showThread(id: String) {}
 
