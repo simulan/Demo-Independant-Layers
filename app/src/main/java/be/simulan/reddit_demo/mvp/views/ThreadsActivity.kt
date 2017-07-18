@@ -21,7 +21,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
-    @Inject protected lateinit var presenter: ThreadsPresenterImpl
+    @Inject lateinit internal var presenter: ThreadsPresenterImpl
     private lateinit var scrollListener: ThreadsScrollListener
 
     override fun onViewReady(savedInstanceState: Bundle?, intent: Intent) {

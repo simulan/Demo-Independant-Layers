@@ -16,8 +16,8 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 open class ThreadsPresenterImpl @Inject constructor() : BasePresenter<ThreadsView>(), ThreadsPresenter, ThreadsProvider, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
-    @Inject protected lateinit var api: IRedditApi
-    @Inject protected lateinit var threadsAdapter: ThreadsAdapter
+    @Inject internal lateinit var api: IRedditApi
+    @Inject internal lateinit var threadsAdapter: ThreadsAdapter
 
     private val threads = ArrayList<ThreadItem>()
     private var threadsObserver: ThreadsObserver? = null
