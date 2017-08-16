@@ -15,10 +15,10 @@ class ThreadsAdapter() : RecyclerView.Adapter<ThreadItemViewHolder>() {
     private val thumbnailClickSubject: PublishSubject<String> = PublishSubject.create()
 
     override fun onCreateViewHolder(container: ViewGroup, index: Int): ThreadItemViewHolder? = ThreadItemViewHolder(container.inflate(R.layout.row_thread))
-    override fun onBindViewHolder(viewHolder: ThreadItemViewHolder?, index: Int) {
-        viewHolder?.bind(provider!!.getItem(index))
-        viewHolder?.getThumbnailClicks()!!.subscribe(thumbnailClickSubject)
-        viewHolder?.getThreadClicks()!!.subscribe(threadClickSubject)
+    override fun onBindViewHolder(viewHolder: ThreadItemViewHolder, index: Int) {
+        viewHolder.bind(provider!!.getItem(index))
+        viewHolder.getThumbnailClicks().subscribe(thumbnailClickSubject)
+        viewHolder.getThreadClicks().subscribe(threadClickSubject)
     }
     override fun getItemCount(): Int = provider?.getItemCount() ?: 0
 

@@ -28,12 +28,14 @@ open class ThreadsPresenterImpl @Inject constructor() : BasePresenter<ThreadsVie
 
     override fun getAdapter(): ThreadsAdapter = threadsAdapter
     override fun bindAdapter() {
-        bindViewHolderEvents()
         threadsAdapter.setProvider(this)
+        bindViewHolderEvents()
     }
     private fun bindViewHolderEvents() {
         threadsAdapter.getThreadClickSubject().subscribe { getView().showThread(it) }
-        threadsAdapter.getThumbnailClickSubject().subscribe { loadThumbnail(it) }
+        threadsAdapter.getThumbnailClickSubject().subscribe {
+            loadThumbnail(it)
+        }
     }
 
     override fun loadThreads(): Boolean {
@@ -72,16 +74,13 @@ open class ThreadsPresenterImpl @Inject constructor() : BasePresenter<ThreadsVie
                 addThreads(t.asList())
             }
         }
-
         override fun onComplete() {
             streamDisposer.dispose()
             this@ThreadsPresenterImpl.threadsObserver = null
         }
-
         override fun onError(e: Throwable?) {
             getView().showToast(e!!.message!!)
         }
-
         override fun onSubscribe(d: Disposable?) {
             streamDisposer = d!!
         }

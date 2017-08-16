@@ -4,7 +4,7 @@
               android:orientation="vertical"
               android:background="@color/colorOpaqueBlack"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="match_parent"
               android:padding="15dp"
               android:gravity="center"
               android:layout_gravity="center"
@@ -12,15 +12,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageView
-            android:id="@+id/imgv_thumbnail_back"
-            android:src="@drawable/ic_back"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:padding="2dp"
-            android:layout_margin="5dp"
-            />
+        android:id="@+id/containerContent_thumbnail"
+        android:orientation="vertical">
         <TextView
             android:textColor="@color/colorWhite"
             android:id="@+id/txtv_thumbnail_title"
@@ -29,8 +22,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
-
-    </LinearLayout>
     <ImageView
         android:id="@+id/imgv_thumbnail"
         android:src="@raw/placeholder"
@@ -39,4 +30,6 @@
         android:adjustViewBounds="true"
         android:layout_marginTop="5dp"
         android:contentDescription="@string/description_thumbnail"/>
+    </LinearLayout>
+
 </LinearLayout>

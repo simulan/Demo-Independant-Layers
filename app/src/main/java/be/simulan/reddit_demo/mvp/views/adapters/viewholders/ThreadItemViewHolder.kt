@@ -41,7 +41,9 @@ class ThreadItemViewHolder(view: View) : RecyclerView.ViewHolder(view), ThreadIt
     }
     private fun getScoreGradient(score : Long) : GradientDrawable = GradientDrawable(gradientType, ScoreGradient.get(score).colors)
 
-    override fun getThumbnailClicks() : Observable<String> = RxView.clicks(itemView.thumbnail).map { getThreadId() }
+    override fun getThumbnailClicks() : Observable<String> = RxView.clicks(itemView.thumbnail).map {
+        getThreadId()
+    }
     override fun getThreadClicks() : Observable<String> = RxView.clicks(itemView.thread).map { getThreadId() }
     override fun getThreadId(): String = threadId
 }

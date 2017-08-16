@@ -11,6 +11,8 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import be.simulan.reddit_demo.R
 import be.simulan.reddit_demo.di.components.DaggerThreadsComponent
@@ -18,7 +20,7 @@ import be.simulan.reddit_demo.di.modules.ThreadsModule
 import be.simulan.reddit_demo.mvp.models.data.ThumbnailItem
 import be.simulan.reddit_demo.mvp.presenters.ThreadsPresenterImpl
 import be.simulan.reddit_demo.mvp.views.adapters.scrollers.EndlessScrollListener
-import be.simulan.reddit_demo.mvp.views.sub.ThumbnailView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_threads.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -26,7 +28,6 @@ import javax.inject.Inject
 class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
     @Inject lateinit internal var presenter: ThreadsPresenterImpl
     private lateinit var scrollListener: ThreadsScrollListener
-    private var thumbnailView : ThumbnailView? = null
     private var state : State = State.READY
 
     override fun onViewReady(savedInstanceState: Bundle?, intent: Intent) {
@@ -46,18 +47,17 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if(state==State.SHOWING_THUMBNAIL) {
-            val thumbnail = container.findViewById(R.id.container_thumbnail)
+            val thumbnail : View = container.findViewById(R.id.containerContent_thumbnail)
             if(!thumbnail.pointWithin(Point(ev!!.rawX.toInt(), ev.rawY.toInt()))) {
                 hideThumbnail()
+                return true
             }
+        }else{
+            return super.dispatchTouchEvent(ev)
         }
-        return true
+        return false
     }
-    private fun View.pointWithin(point : Point) : Boolean {
-        var circumference : Rect = Rect()
-        getGlobalVisibleRect(circumference)
-        return circumference.contains(point.x,point.y)
-    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.threads_menu, menu)
         val searchItem = menu!!.findItem(R.id.action_search)
@@ -74,14 +74,21 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
     override fun showThumbnail(thumbnailItem: ThumbnailItem) {
         if(state==State.READY) {
             state=State.SHOWING_THUMBNAIL
-            thumbnailView = ThumbnailView(container,thumbnailItem)
-            thumbnailView!!.show()
+            val view : View = container.inflate(R.layout.view_thumbnail,true)
+            loadThumbnail(view,thumbnailItem)
         }
     }
+    private fun loadThumbnail(v : View,item : ThumbnailItem) {
+        val title = v.findViewById(R.id.txtv_thumbnail_title) as TextView
+        val imgv = v.findViewById(R.id.imgv_thumbnail) as ImageView
+        title.text = item.title
+        Picasso.with(this@ThreadsActivity).load(item.thumbnail.url)
+                .placeholder(R.raw.placeholder)
+                .fit().centerCrop().into(imgv)
+    }
     fun hideThumbnail() {
-        thumbnailView!!.hide()
-        thumbnailView = null
         state = State.READY
+        container.removeView(findViewById(R.id.container_thumbnail))
     }
     override fun showThread(id: String) {}
 
@@ -101,10 +108,14 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
             Timber.d("scrolled up and requesting more items")
             return presenter.loadThreads()
         }
-
     }
     private enum class State {
         READY,
         SHOWING_THUMBNAIL
+    }
+    private fun View.pointWithin(point : Point) : Boolean {
+        var circumference : Rect = Rect()
+        this.getGlobalVisibleRect(circumference)
+        return circumference.contains(point.x,point.y)
     }
 }
