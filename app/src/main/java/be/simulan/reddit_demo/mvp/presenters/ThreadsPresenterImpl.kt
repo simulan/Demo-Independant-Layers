@@ -34,8 +34,7 @@ open class ThreadsPresenterImpl @Inject constructor() : BasePresenter<ThreadsVie
     private fun bindViewHolderEvents() {
         threadsAdapter.getThreadClickSubject().subscribe { getView().showThread(it) }
         threadsAdapter.getThumbnailClickSubject().subscribe {
-            loadThumbnail(it)
-        }
+            loadThumbnail(it) }
     }
 
     override fun loadThreads(): Boolean {
@@ -93,16 +92,13 @@ open class ThreadsPresenterImpl @Inject constructor() : BasePresenter<ThreadsVie
                 getView().showThumbnail(t)
             }
         }
-
         override fun onSubscribe(d: Disposable?) {
             streamDisposer = d!!
         }
-
         override fun onComplete() {
             streamDisposer.dispose()
             this@ThreadsPresenterImpl.thumbnailObserver = null
         }
-
         override fun onError(e: Throwable?) {
             getView().showToast(e!!.message!!)
         }

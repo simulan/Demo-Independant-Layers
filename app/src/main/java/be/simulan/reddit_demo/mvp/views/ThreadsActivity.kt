@@ -1,8 +1,10 @@
 package be.simulan.reddit_demo.mvp.views
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Point
 import android.graphics.Rect
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.LinearLayoutManager
@@ -11,7 +13,6 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MotionEvent
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import be.simulan.reddit_demo.R
@@ -20,6 +21,8 @@ import be.simulan.reddit_demo.di.modules.ThreadsModule
 import be.simulan.reddit_demo.mvp.models.data.ThumbnailItem
 import be.simulan.reddit_demo.mvp.presenters.ThreadsPresenterImpl
 import be.simulan.reddit_demo.mvp.views.adapters.scrollers.EndlessScrollListener
+import com.davemorrissey.labs.subscaleview.ImageSource
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_threads.*
 import timber.log.Timber
@@ -78,13 +81,21 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
             loadThumbnail(view,thumbnailItem)
         }
     }
-    private fun loadThumbnail(v : View,item : ThumbnailItem) {
-        val title = v.findViewById(R.id.txtv_thumbnail_title) as TextView
-        val imgv = v.findViewById(R.id.imgv_thumbnail) as ImageView
+    private fun loadThumbnail(container: View, item : ThumbnailItem) {
+        val title = container.findViewById(R.id.txtv_thumbnail_title) as TextView
+        val imageView = container.findViewById(R.id.imgv_thumbnail) as SubsamplingScaleImageView
         title.text = item.title
-        Picasso.with(this@ThreadsActivity).load(item.thumbnail.url)
-                .placeholder(R.raw.placeholder)
-                .fit().centerCrop().into(imgv)
+        val target = object : com.squareup.picasso.Target {
+            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+            override fun onBitmapFailed(errorDrawable: Drawable?) {
+                hideThumbnail()
+                Toast.makeText(this@ThreadsActivity,"Could not show image", Toast.LENGTH_SHORT).show()
+            }
+            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) = imageView.setImage(ImageSource.bitmap(bitmap))
+        }
+        container.post {
+            Picasso.with(this@ThreadsActivity).load(item.thumbnail.url).into(target)
+        }
     }
     fun hideThumbnail() {
         state = State.READY

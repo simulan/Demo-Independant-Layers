@@ -5,6 +5,10 @@ import be.simulan.reddit_demo.mvp.models.data.ThumbnailItem
 import com.google.gson.*
 import java.lang.reflect.Type
 
+/*
+* Thumbnails are hosted on reddit, most thumbnails are too small to show in full screen size
+* */
+
 class ThumbnailOverlayDeserializer : JsonDeserializer<ThumbnailItem> {
     override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): ThumbnailItem {
         val children : JsonArray = (json as JsonObject).getAsJsonObject("data").getAsJsonArray("children")

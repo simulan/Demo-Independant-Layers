@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
-    <ImageView
+    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
         android:id="@+id/imgv_thumbnail"
         android:src="@raw/placeholder"
         android:layout_width="match_parent"
@@ -31,5 +31,4 @@
         android:layout_marginTop="5dp"
         android:contentDescription="@string/description_thumbnail"/>
     </LinearLayout>
-
 </LinearLayout>

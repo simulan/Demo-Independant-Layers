@@ -8,11 +8,6 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import java.lang.reflect.Type
 
-/**
- * @author Simulan
- * @version 1.0.0
- * @since 28/06/2017
- */
 class RThreadDeserializer : JsonDeserializer<ThreadItem> {
     override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): ThreadItem {
         val obj = (json as JsonObject).getAsJsonObject("data")
@@ -21,10 +16,11 @@ class RThreadDeserializer : JsonDeserializer<ThreadItem> {
         t.title = obj["title"].asString
         t.author = obj["author"].asString
         t.score = obj["score"].asLong
+        t.type = getType(obj["url"].asString)
         t.thumbnail = Thumbnail()
         t.thumbnail.url = obj["thumbnail"].asString
 
-        //check JsonNull
+
         val widthJsonProp = obj["thumbnail_width"]
         val heightJsonProp = obj["thumbnail_height"]
         if(!widthJsonProp.isJsonNull && !heightJsonProp.isJsonNull){
@@ -33,5 +29,15 @@ class RThreadDeserializer : JsonDeserializer<ThreadItem> {
             t.thumbnail.dimensions = Pair(0,0)
         }
         return t
+    }
+
+    fun getType(url : String) : ThreadItem.Type {
+        if(url.contains(".jpg") || url.contains(".png") || url.contains(".gif")) {
+            return ThreadItem.Type.Image
+        }else if(url.contains("reddit")) {
+            return ThreadItem.Type.Post
+        }else {
+            return ThreadItem.Type.Link
+        }
     }
 }
