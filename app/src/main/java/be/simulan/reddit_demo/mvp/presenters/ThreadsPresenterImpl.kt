@@ -34,7 +34,8 @@ open class ThreadsPresenterImpl @Inject constructor() : BasePresenter<ThreadsVie
     private fun bindViewHolderEvents() {
         threadsAdapter.getThreadClickSubject().subscribe { getView().showThread(it) }
         threadsAdapter.getThumbnailClickSubject().subscribe {
-            loadThumbnail(it) }
+            loadThumbnailIfThreadTypeIsImage(it)
+        }
     }
 
     override fun loadThreads(): Boolean {
@@ -57,6 +58,11 @@ open class ThreadsPresenterImpl @Inject constructor() : BasePresenter<ThreadsVie
         category = newCategory
     }
 
+    fun loadThumbnailIfThreadTypeIsImage(id: String) {
+        if(threads.filter{ it.id == id }.single().type == ThreadItem.Type.Image) {
+            loadThumbnail(id)
+        }
+    }
     fun loadThumbnail(id: String) {
         if (thumbnailObserverIsAvailable()) {
             thumbnailObserver = ThumbnailObserver()
