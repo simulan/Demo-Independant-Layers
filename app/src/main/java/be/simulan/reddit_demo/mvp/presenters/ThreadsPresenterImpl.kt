@@ -37,7 +37,6 @@ open class ThreadsPresenterImpl @Inject constructor() : BasePresenter<ThreadsVie
             loadThumbnailIfThreadTypeIsImage(it)
         }
     }
-
     override fun loadThreads(): Boolean {
         if (threadObserverIsAvailable()) {
             threadsObserver = ThreadsObserver()
