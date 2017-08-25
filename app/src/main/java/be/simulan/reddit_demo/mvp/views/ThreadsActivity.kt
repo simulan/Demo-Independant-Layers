@@ -29,6 +29,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
+    val EXTRA_ID = "${this.javaClass}.Id"
     @Inject lateinit internal var presenter: ThreadsPresenterImpl
     private lateinit var scrollListener: ThreadsScrollListener
     private var state : State = State.READY
@@ -101,7 +102,10 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
         state = State.READY
         container.removeView(findViewById(R.id.container_thumbnail))
     }
-    override fun showThread(id: String) {}
+    override fun showThread(id: String) {
+        startActivity(Intent(this,ThreadActivity::class.java)
+                .putExtra(EXTRA_ID,id))
+    }
 
     override fun getContentView(): Int = R.layout.activity_threads
     override fun resolveDaggerDependencies() {

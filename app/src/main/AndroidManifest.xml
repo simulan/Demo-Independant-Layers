@@ -33,7 +33,9 @@
                     android:scheme="http"/>
             </intent-filter>
         </activity>
-        <activity android:name=".mvp.views.activity_thread">
+        <activity android:name=".mvp.views.ThreadActivity"
+                  android:theme="@style/AppThemeNoActionBar"
+            >
         </activity>
     </application>
 
