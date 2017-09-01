@@ -4,10 +4,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import be.simulan.reddit_demo.R
-import be.simulan.reddit_demo.mvp.views.adapters.viewholders.FullBleedCardItem
-import be.simulan.reddit_demo.mvp.views.adapters.viewholders.HeaderItem
+import be.simulan.reddit_demo.mvp.models.data.Comment
+import be.simulan.reddit_demo.mvp.models.data.ExpandableCommentGroup
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_threads.*
 
@@ -34,10 +33,22 @@ class ThreadActivity : AppCompatActivity() {
         }
     }
     private fun populateList() {
-        val fullBleedItemSection  = Section(HeaderItem(R.string.comments_section))
-        val item = FullBleedCardItem(R.color.colorBlueBG)
-        item.text="Text here"
-        fullBleedItemSection.add(item)
-        groupAdapter.add(fullBleedItemSection)
+        var lvl3comment = Comment(arrayListOf())
+        lvl3comment.author = "Charle"
+        lvl3comment.text = "C'est faux"
+        var lvl3comment2 = Comment(arrayListOf())
+        lvl3comment2.author = "MJL"
+        lvl3comment2.text = "this ^"
+        var lvl2comment = Comment(arrayListOf(lvl3comment,lvl3comment2))
+        lvl2comment.author = "TheGreatEscalade"
+        lvl2comment.text = "It's because it's depicted as such"
+        var lvl2comment2 = Comment(arrayListOf())
+        lvl2comment2.author = "Loldrol"
+        lvl2comment2.text = "roflcopter"
+        var lvl1comment = Comment(arrayListOf(lvl2comment,lvl2comment2))
+        lvl1comment.author = "PizzaFThis"
+        lvl1comment.text = "This seems to be a conspiracy"
+        var expandableGroup = ExpandableCommentGroup(lvl1comment)
+        groupAdapter.add(expandableGroup)
     }
 }

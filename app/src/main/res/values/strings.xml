@@ -5,4 +5,6 @@
     <string name="threads_menu_sort">Sort</string>
     <string name="description_thumbnail">Thumbnail of subject.</string>
     <string name="comments_section">comments</string>
+    <string name="expanding_group">Expanding.Title</string>
+    <string name="expanding_group_subtitle">Expanding.Subtitle</string>
 </resources>
