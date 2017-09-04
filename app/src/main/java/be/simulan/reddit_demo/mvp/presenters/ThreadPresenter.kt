@@ -4,8 +4,6 @@ import be.simulan.reddit_demo.mvp.models.data.Comment
 import be.simulan.reddit_demo.mvp.models.data.Thread
 
 interface ThreadPresenter {
-    fun loadThread()
-    fun loadComments()
-    fun getThread() : Thread
-    fun getComments() : ArrayList<Comment>
+    fun loadThread(id:String)
+    fun loadComments(id:String)
 }

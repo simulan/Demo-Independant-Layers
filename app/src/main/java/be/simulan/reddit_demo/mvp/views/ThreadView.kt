@@ -1,9 +1,9 @@
 package be.simulan.reddit_demo.mvp.views
 
 import be.simulan.reddit_demo.mvp.models.data.Comment
-import be.simulan.reddit_demo.mvp.models.data.Thread
+import be.simulan.reddit_demo.mvp.models.data.ThreadItem
 
-interface ThreadView {
-    fun showThread(thread : Thread)
+interface ThreadView : BaseView {
+    fun showThread(thread : ThreadItem)
     fun showComments(comments : List<Comment>)
 }

@@ -1,5 +1,6 @@
 package be.simulan.reddit_demo.da.apis
 
+import be.simulan.reddit_demo.mvp.models.data.Comment
 import be.simulan.reddit_demo.mvp.models.data.ThreadItem
 import be.simulan.reddit_demo.mvp.models.data.ThumbnailItem
 import io.reactivex.Observable
@@ -21,8 +22,10 @@ interface IRedditApi {
                       @Query("limit") limit : Int=1,
                       @Query("count") count : Int) : Observable<Array<ThreadItem>>
     @GET("/by_id/{id}.json?")
+    fun getThreadById(@Path("id") id : String) : Observable<ThreadItem>
+    @GET("/by_id/{id}.json?")
     fun getThumbnailById(@Path("id") id : String) : Observable<ThumbnailItem>
     @GET("/r/{sub}/comments/{id}/comments.json?")
     fun listComments(@Path("sub") sub : String = "androiddev",
-                    @Path("id") after : String)
+                    @Path("id") id : String) : Observable<Array<Comment>>
 }

@@ -8,11 +8,8 @@ import be.simulan.reddit_demo.mvp.models.data.ThumbnailItem
 import be.simulan.reddit_demo.mvp.models.static.LIMIT
 import be.simulan.reddit_demo.mvp.views.ThreadsView
 import be.simulan.reddit_demo.mvp.views.adapters.ThreadsAdapter
-import io.reactivex.Observable
 import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 open class ThreadsPresenterImpl @Inject constructor() : BasePresenter<ThreadsView>(), ThreadsPresenter, ThreadsProvider, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
@@ -148,7 +145,5 @@ open class ThreadsPresenterImpl @Inject constructor() : BasePresenter<ThreadsVie
         loadThreads()
     }
 
-    private fun <T : Any> Observable<T>.subscribeAsync(observer: Observer<T>) {
-        this.subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer)
-    }
+
 }
