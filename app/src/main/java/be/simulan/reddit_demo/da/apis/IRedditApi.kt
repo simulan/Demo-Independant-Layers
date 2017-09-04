@@ -7,8 +7,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-//ThreadID is prefixed by t3_
-
 interface IRedditApi {
     @GET("/r/{sub}/new.json?")
     fun listThreads(@Path("sub") sub : String = "androiddev",
@@ -24,4 +22,7 @@ interface IRedditApi {
                       @Query("count") count : Int) : Observable<Array<ThreadItem>>
     @GET("/by_id/{id}.json?")
     fun getThumbnailById(@Path("id") id : String) : Observable<ThumbnailItem>
+    @GET("/r/{sub}/comments/{id}/comments.json?")
+    fun listComments(@Path("sub") sub : String = "androiddev",
+                    @Path("id") after : String)
 }
