@@ -2,7 +2,6 @@ package be.simulan.reddit_demo.mvp.presenters
 
 import be.simulan.reddit_demo.da.apis.IRedditApi
 import be.simulan.reddit_demo.mvp.models.data.Comment
-import be.simulan.reddit_demo.mvp.models.data.Thread
 import be.simulan.reddit_demo.mvp.models.data.ThreadItem
 import be.simulan.reddit_demo.mvp.views.ThreadView
 import io.reactivex.Observer
@@ -16,7 +15,7 @@ class ThreadPresenterImpl @Inject constructor() : BasePresenter<ThreadView>(), T
 
     override fun loadThread(id:String) {
         if(commentsObserver==null) {
-            commentsObserver = CommentsObserver()
+            threadObserver = ThreadObserver()
             api.getThreadById(id).subscribeAsync(threadObserver!!)
         }
 
@@ -24,7 +23,7 @@ class ThreadPresenterImpl @Inject constructor() : BasePresenter<ThreadView>(), T
     override fun loadComments(idOfThread:String) {
         if(commentsObserver==null) {
             commentsObserver = CommentsObserver()
-            api.listComments(id=idOfThread).subscribeAsync(commentsObserver!!)
+            api.listComments(id=idOfThread.split(Regex("[_]"),0)[1]).subscribeAsync(commentsObserver!!)
         }
     }
 

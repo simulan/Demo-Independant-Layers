@@ -6,13 +6,6 @@ import dagger.Component
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
-
-
-/**
- * @author Simulan
- * @version 1.0.0
- * @since 11/06/2017
- */
 @Singleton
 @Component(modules = arrayOf(ApplicationModule::class))
 interface ApplicationComponent {

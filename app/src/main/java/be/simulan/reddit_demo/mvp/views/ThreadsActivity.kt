@@ -3,7 +3,6 @@ package be.simulan.reddit_demo.mvp.views
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Point
-import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.view.MenuItemCompat
@@ -21,6 +20,7 @@ import be.simulan.reddit_demo.di.modules.ThreadsModule
 import be.simulan.reddit_demo.mvp.models.data.ThumbnailItem
 import be.simulan.reddit_demo.mvp.presenters.ThreadsPresenterImpl
 import be.simulan.reddit_demo.mvp.views.adapters.scrollers.EndlessScrollListener
+import be.simulan.reddit_demo.mvp.views.utils.pointWithin
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.squareup.picasso.Picasso
@@ -28,8 +28,11 @@ import kotlinx.android.synthetic.main.activity_threads.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
-    val EXTRA_ID = "${this.javaClass}.Id"
+
+class ThreadsActivity @Inject constructor() : BaseActivity(), ThreadsView {
+    companion object {
+        val EXTRA_THREAD_ID = "Thread.id"
+    }
     @Inject lateinit internal var presenter: ThreadsPresenterImpl
     private lateinit var scrollListener: ThreadsScrollListener
     private var state : State = State.READY
@@ -49,7 +52,8 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
         presenter.bindAdapter()
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean = dismissThumbnailIfClickedOutside(ev)
+    fun dismissThumbnailIfClickedOutside(ev: MotionEvent?) : Boolean {
         if(state==State.SHOWING_THUMBNAIL) {
             val thumbnail : View = container.findViewById(R.id.containerContent_thumbnail)
             if(!thumbnail.pointWithin(Point(ev!!.rawX.toInt(), ev.rawY.toInt()))) {
@@ -104,7 +108,7 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
     }
     override fun showThread(id: String) {
         startActivity(Intent(this,ThreadActivity::class.java)
-                .putExtra(EXTRA_ID,id))
+                .putExtra(EXTRA_THREAD_ID,id))
     }
 
     override fun getContentView(): Int = R.layout.activity_threads
@@ -127,10 +131,5 @@ class ThreadsActivity constructor() : BaseActivity(), ThreadsView {
     private enum class State {
         READY,
         SHOWING_THUMBNAIL
-    }
-    private fun View.pointWithin(point : Point) : Boolean {
-        var circumference : Rect = Rect()
-        this.getGlobalVisibleRect(circumference)
-        return circumference.contains(point.x,point.y)
     }
 }

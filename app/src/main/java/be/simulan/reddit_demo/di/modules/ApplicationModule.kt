@@ -3,8 +3,8 @@ package be.simulan.reddit_demo.di.modules
 import android.content.Context
 import be.simulan.reddit_demo.mvp.models.data.ThreadItem
 import be.simulan.reddit_demo.mvp.models.data.ThumbnailItem
-import be.simulan.reddit_demo.mvp.models.type_adapters.RThreadCollectionDeserializer
-import be.simulan.reddit_demo.mvp.models.type_adapters.ThumbnailOverlayDeserializer
+import be.simulan.reddit_demo.mvp.models.data.enveloppe.CommentConversion
+import be.simulan.reddit_demo.mvp.models.type_adapters.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -15,11 +15,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-/**
- * @author Simulan
- * @version 1.0.0
- * @since 11/06/2017
- */
 @Module
 class ApplicationModule(private val mContext: Context) {
     private val URL : String = "https://www.reddit.com"
@@ -31,10 +26,17 @@ class ApplicationModule(private val mContext: Context) {
     }
     @Singleton
     @Provides
+    fun provideJsonAnnotatedConverterFactory(): JsonAnnotatedConverterFactory {
+        return JsonAnnotatedConverterFactory()
+    }
+    @Singleton
+    @Provides
     fun provideGsonConverterFactory(): GsonConverterFactory {
         val gson : Gson = GsonBuilder()
-                .registerTypeAdapter(Array<ThreadItem>::class.java,RThreadCollectionDeserializer())
+                .registerTypeAdapter(Array<ThreadItem>::class.java, ThreadCollectionDeserializer())
                 .registerTypeAdapter(ThumbnailItem::class.java,ThumbnailOverlayDeserializer())
+                .registerTypeAdapter(ThreadItem::class.java,QueriedThreadDeserializer())
+                .registerTypeAdapter(CommentConversion::class.java, CommentDeserializer2())
                 .create()
         return GsonConverterFactory.create(gson)
     }
@@ -51,11 +53,12 @@ class ApplicationModule(private val mContext: Context) {
     }
     @Singleton
     @Provides
-    fun provideRetrofit(client: OkHttpClient, converterFactory: GsonConverterFactory, adapterFactory: RxJava2CallAdapterFactory): Retrofit {
+    fun provideRetrofit(client: OkHttpClient, jsonAnnotatedConverterFactory: JsonAnnotatedConverterFactory, gsonConverterFactory: GsonConverterFactory, adapterFactory: RxJava2CallAdapterFactory): Retrofit {
         return Retrofit.Builder()
                 .client(client)
                 .baseUrl(URL)
-                .addConverterFactory(converterFactory)
+                .addConverterFactory(jsonAnnotatedConverterFactory)
+                .addConverterFactory(gsonConverterFactory)
                 .addCallAdapterFactory(adapterFactory)
                 .build()
     }

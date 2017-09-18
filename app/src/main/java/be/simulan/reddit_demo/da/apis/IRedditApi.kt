@@ -25,7 +25,10 @@ interface IRedditApi {
     fun getThreadById(@Path("id") id : String) : Observable<ThreadItem>
     @GET("/by_id/{id}.json?")
     fun getThumbnailById(@Path("id") id : String) : Observable<ThumbnailItem>
-    @GET("/r/{sub}/comments/{id}/comments.json?")
+    @GET("/r/{sub}/comments/{id}/comments.json?") @BoxedArray
     fun listComments(@Path("sub") sub : String = "androiddev",
                     @Path("id") id : String) : Observable<Array<Comment>>
+
 }
+
+annotation class BoxedArray
