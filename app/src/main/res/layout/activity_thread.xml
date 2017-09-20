@@ -60,12 +60,17 @@
             <LinearLayout
                 android:id="@+id/statsContainer"
                 android:layout_width="match_parent"
-                android:layout_height="40dp">
+                android:layout_height="40dp"
+                android:divider="@drawable/separator"
+                android:showDividers="middle"
+                android:background="@drawable/border_bottom"
+                >
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="5 votes"
+                        android:id="@+id/txtvVotes"
                         android:gravity="center"
                         />
                     <TextView
@@ -73,6 +78,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="1.3K comments"
+                        android:id="@+id/txtvTotalComments"
                         android:gravity="center"
                         />
                     <TextView
@@ -80,8 +86,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="A moment ago"
+                        android:id="@+id/txtvPosted"
                         android:gravity="center"
-                    />
+                        />
             </LinearLayout>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerview"

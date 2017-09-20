@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import be.simulan.reddit_demo.mvp.models.data.Comment;
 import okhttp3.ResponseBody;
@@ -13,10 +14,10 @@ import retrofit2.Converter;
 
 import static be.simulan.reddit_demo.mvp.models.type_adapters.utils.CommentDeserializerUtilKt.getComment;
 
-public class BoxedJsonArrayConverter implements Converter<ResponseBody,Comment[]> {
+public class BoxedCommentsConverter implements Converter<ResponseBody,Comment[]> {
     private Gson gson;
 
-    BoxedJsonArrayConverter () {
+    BoxedCommentsConverter () {
         gson = new Gson();
     }
     @Override public Comment[] convert (ResponseBody value) throws IOException {
@@ -38,8 +39,9 @@ public class BoxedJsonArrayConverter implements Converter<ResponseBody,Comment[]
     private Comment[] getComments(JsonObject json) {
         JsonArray commentsArray = json.get("data").getAsJsonObject().get("children").getAsJsonArray();
         Comment[] results = new Comment[commentsArray.size()];
+        Iterator iterator = commentsArray.iterator();
         for(int i=0;i<commentsArray.size();i++) {
-            JsonElement jsonElement = commentsArray.iterator().next();
+            JsonElement jsonElement = (JsonElement) iterator.next();
             results[i] = getComment(jsonElement.getAsJsonObject().get("data").getAsJsonObject());
         }
         return results;

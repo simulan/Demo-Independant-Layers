@@ -11,14 +11,14 @@ import retrofit2.Converter;
 import retrofit2.Retrofit;
 
 public class JsonAnnotatedConverterFactory extends Converter.Factory {
-    private BoxedJsonArrayConverter boxedJsonArrayConverter = new BoxedJsonArrayConverter();
+    private BoxedCommentsConverter boxedCommentsConverter = new BoxedCommentsConverter();
     String specialAnnotation = "BoxedArray";
 
 
     @Nullable @Override
     public Converter<ResponseBody, ?> responseBodyConverter (Type type, Annotation[] annotations, Retrofit retrofit) {
         if(hasSpecialAnnotation(annotations)) {
-            return boxedJsonArrayConverter;
+            return boxedCommentsConverter;
         }else{
             return super.responseBodyConverter(type, annotations, retrofit);
         }

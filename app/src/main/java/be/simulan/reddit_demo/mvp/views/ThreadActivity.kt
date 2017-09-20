@@ -7,6 +7,7 @@ import be.simulan.reddit_demo.R
 import be.simulan.reddit_demo.di.components.DaggerThreadComponent
 import be.simulan.reddit_demo.di.modules.ThreadModule
 import be.simulan.reddit_demo.mvp.models.data.Comment
+import be.simulan.reddit_demo.mvp.models.data.ExpandableCommentGroup
 import be.simulan.reddit_demo.mvp.models.data.ThreadItem
 import be.simulan.reddit_demo.mvp.presenters.ThreadPresenterImpl
 import be.simulan.reddit_demo.mvp.views.ThreadsActivity.Companion.EXTRA_THREAD_ID
@@ -48,9 +49,10 @@ class ThreadActivity @Inject constructor() : BaseActivity(),ThreadView {
         txtvAuthor.text = thread.author
     }
     override fun showComments(comments: List<Comment>) {
-
+        groupAdapter.addAll(List(comments.size) {
+            index -> ExpandableCommentGroup(comments[index])
+        })
     }
-
     override fun resolveDaggerDependencies() {
         DaggerThreadComponent.builder()
                 .applicationComponent(getApplicationComponent())

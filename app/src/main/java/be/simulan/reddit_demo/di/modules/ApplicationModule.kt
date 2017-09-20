@@ -3,8 +3,10 @@ package be.simulan.reddit_demo.di.modules
 import android.content.Context
 import be.simulan.reddit_demo.mvp.models.data.ThreadItem
 import be.simulan.reddit_demo.mvp.models.data.ThumbnailItem
-import be.simulan.reddit_demo.mvp.models.data.enveloppe.CommentConversion
-import be.simulan.reddit_demo.mvp.models.type_adapters.*
+import be.simulan.reddit_demo.mvp.models.type_adapters.JsonAnnotatedConverterFactory
+import be.simulan.reddit_demo.mvp.models.type_adapters.QueriedThreadDeserializer
+import be.simulan.reddit_demo.mvp.models.type_adapters.ThreadCollectionDeserializer
+import be.simulan.reddit_demo.mvp.models.type_adapters.ThumbnailOverlayDeserializer
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -36,7 +38,6 @@ class ApplicationModule(private val mContext: Context) {
                 .registerTypeAdapter(Array<ThreadItem>::class.java, ThreadCollectionDeserializer())
                 .registerTypeAdapter(ThumbnailItem::class.java,ThumbnailOverlayDeserializer())
                 .registerTypeAdapter(ThreadItem::class.java,QueriedThreadDeserializer())
-                .registerTypeAdapter(CommentConversion::class.java, CommentDeserializer2())
                 .create()
         return GsonConverterFactory.create(gson)
     }

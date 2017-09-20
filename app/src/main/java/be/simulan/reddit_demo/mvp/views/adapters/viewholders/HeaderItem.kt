@@ -19,21 +19,14 @@ open class HeaderItem @JvmOverloads constructor(
     }
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.title.setText(titleStringResId)
+        viewHolder.itemView.author.setText(titleStringResId)
 
-        viewHolder.itemView.subtitle.apply {
+        viewHolder.itemView.text.apply {
             visibility = if (subtitleResId > 0) View.VISIBLE else View.GONE
             if (subtitleResId > 0) {
                 setText(subtitleResId)
             }
         }
 
-        viewHolder.itemView.icon.apply {
-            visibility = if (iconResId > 0) View.VISIBLE else View.GONE
-            if (iconResId > 0) {
-                setImageResource(iconResId)
-                setOnClickListener(onIconClickListener)
-            }
-        }
     }
 }

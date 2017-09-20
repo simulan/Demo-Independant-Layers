@@ -15,8 +15,8 @@ class ExpandableCommentItem(private val comment : Comment, private val depth : I
     override fun bind(viewHolder: ViewHolder, position: Int) {
         addInDepthViews(viewHolder)
 
-        viewHolder.itemView.title.text = comment.author
-        viewHolder.itemView.subtitle.text = comment.text
+        viewHolder.itemView.author.text = comment.author
+        viewHolder.itemView.text.text = comment.text
         viewHolder.itemView.apply {
             setOnLongClickListener({
                     toggleListener.onToggleExpanded()

@@ -19,7 +19,7 @@ class ThreadItemViewHolder(view: View) : RecyclerView.ViewHolder(view), ThreadIt
 
     fun bind(item: ThreadItem) = with(itemView) {
         threadId = item.id
-        title.text = item.title
+        author.text = item.title
         txtvAuthor.text = item.author
         loadThumbnail(context, item.thumbnail.url, thumbnail)
         indicator.background = getScoreGradient(item.score)
