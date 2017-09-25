@@ -6,7 +6,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="be.simulan.reddit_demo.mvp.views.ThreadsActivity">
+    tools:context="be.simulan.reddit_demo.thread.views.ThreadsActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"

@@ -1,6 +1,7 @@
 package be.simulan.reddit_demo
 
 import android.content.Context
+import be.simulan.reddit_demo.application.RedditApplication
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment

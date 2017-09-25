@@ -1,6 +1,6 @@
 package be.simulan.reddit_demo
 
-import be.simulan.reddit_demo.mvp.views.ThreadsActivity
+import be.simulan.reddit_demo.thread.views.ThreadsActivity
 import org.junit.Assert
 import org.junit.Test
 import org.robolectric.Robolectric

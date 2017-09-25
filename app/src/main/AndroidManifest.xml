@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name=".RedditApplication"
+        android:name=".application.RedditApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".mvp.views.ThreadsActivity"
+            android:name=".thread.views.ThreadsActivity"
             android:launchMode="singleTask">
             <intent-filter
                 android:autoVerify="true"
@@ -33,7 +33,7 @@
                     android:scheme="http"/>
             </intent-filter>
         </activity>
-        <activity android:name=".mvp.views.ThreadActivity"
+        <activity android:name=".thread.views.ThreadActivity"
                   android:theme="@style/AppThemeNoActionBar"
             >
         </activity>

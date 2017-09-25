@@ -1,6 +1,7 @@
 package be.simulan.reddit_demo.mvp.views
 
 import be.simulan.reddit_demo.AndroidTest
+import be.simulan.reddit_demo.thread.views.ThreadsActivity
 import kotlinx.android.synthetic.main.activity_threads.*
 import org.junit.Before
 import org.junit.Test
