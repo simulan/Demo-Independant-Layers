@@ -2,16 +2,9 @@ package be.simulan.reddit_demo.application
 
 import android.app.Application
 import be.simulan.reddit_demo.BuildConfig
-import be.simulan.reddit_demo.di.components.DaggerApplicationComponent
+import be.simulan.reddit_demo.application.DaggerApplicationComponent
 import timber.log.Timber
 
-
-
-/**
- * @author Simulan
- * @version 1.0.0
- * @since 11/06/2017
- */
 open class RedditApplication : Application() {
     private lateinit var mApplicationComponent: ApplicationComponent;
 

@@ -7,7 +7,7 @@ import be.simulan.reddit_demo.R
 import be.simulan.reddit_demo.application.views.BaseActivity
 import be.simulan.reddit_demo.comments.models.Comment
 import be.simulan.reddit_demo.comments.views.ExpandableCommentGroup
-import be.simulan.reddit_demo.di.components.DaggerThreadComponent
+import be.simulan.reddit_demo.thread.DaggerThreadComponent
 import be.simulan.reddit_demo.thread.ThreadModule
 import be.simulan.reddit_demo.thread.models.ThreadItem
 import be.simulan.reddit_demo.thread.presenters.ThreadPresenterImpl
